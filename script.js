@@ -162,47 +162,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to generate invoice preview
     function previewInvoice() {
-        let invoiceContent = `
-            <h3>Invoice</h3>
-            <p>Date: ${new Date().toLocaleDateString()}</p>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Material</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
+        const originalInvoiceContainer = document.querySelector('.invoice-container');
+        const clone = originalInvoiceContainer.cloneNode(true);
+        
+        // Remove interactive elements from the clone
+        clone.querySelector('.header').remove(); // Remove header with toggle
+        clone.querySelector('.search-section').remove(); // Remove search section
+        clone.querySelector('.invoice-buttons').remove(); // Remove buttons
+        
+        // Replace input fields with their values
+        clone.querySelectorAll('input').forEach(input => {
+            const span = document.createElement('span');
+            span.textContent = input.value;
+            input.replaceWith(span);
+        });
+
+        // Style for the preview (can be moved to CSS if preferred)
+        const previewHTML = `
+            <style>
+                .preview-container {
+                    background-color: #2b2b2b;
+                    padding: 30px;
+                    border-radius: 12px;
+                    color: #f0f0f0;
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                }
+                .preview-container h1 { color: #4CAF50; font-size: 2rem; margin-bottom: 20px; }
+                .preview-container table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                .preview-container th, .preview-container td { padding: 10px; border-bottom: 1px solid #444; text-align: left; }
+                .preview-container th { background-color: #3b3b3b; color: #999; }
+                .preview-container .summary { background-color: #3b3b3b; padding: 15px; border-radius: 8px; }
+                .preview-container .summary div { display: flex; justify-content: space-between; padding: 5px 0; }
+                .preview-container .summary .total-row { font-size: 1.2rem; font-weight: bold; color: #4CAF50; border-top: 2px solid #4CAF50; padding-top: 10px; margin-top: 10px; }
+            </style>
+            <div class="preview-container">
+                ${clone.innerHTML}
+            </div>
         `;
-
-        const isBuying = buySellToggle.checked;
-
-        for (const itemName in cart) {
-            const item = cart[itemName];
-            const price = isBuying ? item.buy_price : item.sell_price;
-            const itemTotal = price * item.quantity;
-            invoiceContent += `
-                <tr>
-                    <td>${item.name}</td>
-                    <td>${item.quantity}</td>
-                    <td>${price.toFixed(2)}</td>
-                    <td>${itemTotal.toFixed(2)}</td>
-                </tr>
-            `;
-        }
-
-        invoiceContent += `
-                </tbody>
-            </table>
-            <p class="text-end">Subtotal: ${subtotalSpan.textContent}</p>
-            <p class="text-end">GST (${gstInput.value}%): ${gstAmountSpan.textContent}</p>
-            <p class="text-end">Tax (${taxInput.value}%): ${taxAmountSpan.textContent}</p>
-            <h4 class="text-end">Total: ${totalAmountSpan.textContent}</h4>
-        `;
-
-        invoicePreview.innerHTML = invoiceContent;
+        invoicePreview.innerHTML = previewHTML;
         previewModal.style.display = 'flex'; // Show the modal
     }
 
@@ -231,26 +228,43 @@ document.addEventListener('DOMContentLoaded', () => {
     previewButton.addEventListener('click', previewInvoice);
 
     downloadButton.addEventListener('click', () => {
-        // Temporarily make the invoicePreview visible and off-screen for html2canvas capture
-        invoicePreview.style.display = 'block';
-        invoicePreview.style.position = 'absolute';
-        invoicePreview.style.left = '-9999px';
-        invoicePreview.style.top = '-9999px';
+        // Create a temporary div to render the invoice for html2canvas
+        const tempDiv = document.createElement('div');
+        tempDiv.style.position = 'absolute';
+        tempDiv.style.left = '-9999px';
+        tempDiv.style.top = '-9999px';
+        tempDiv.style.width = '800px'; // Set a fixed width for consistent rendering
+        tempDiv.style.backgroundColor = '#2b2b2b'; // Match invoice-container background
+        document.body.appendChild(tempDiv);
 
-        html2canvas(invoicePreview, {
-            scale: 2, // Increase scale for better quality image
-            backgroundColor: '#2b2b2b' // Match modal background
+        // Clone the invoice-container and modify it for download
+        const originalInvoiceContainer = document.querySelector('.invoice-container');
+        const clone = originalInvoiceContainer.cloneNode(true);
+        
+        // Remove interactive elements from the clone
+        clone.querySelector('.header').remove(); 
+        clone.querySelector('.search-section').remove(); 
+        clone.querySelector('.invoice-buttons').remove(); 
+        
+        // Replace input fields with their values
+        clone.querySelectorAll('input').forEach(input => {
+            const span = document.createElement('span');
+            span.textContent = input.value;
+            input.replaceWith(span);
+        });
+
+        tempDiv.appendChild(clone);
+
+        html2canvas(tempDiv, {
+            scale: 2, // Higher scale for better image quality
+            backgroundColor: '#2b2b2b' // Ensure background is captured
         }).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'invoice.png';
-            link.href = canvas.toDataURL();
+            link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
+            link.href = canvas.toDataURL('image/png');
             link.click();
         }).finally(() => {
-            // Hide the invoicePreview again after capture
-            invoicePreview.style.display = 'none';
-            invoicePreview.style.position = '';
-            invoicePreview.style.left = '';
-            invoicePreview.style.top = '';
+            document.body.removeChild(tempDiv); // Clean up the temporary div
         });
     });
 
@@ -259,7 +273,6 @@ document.addEventListener('DOMContentLoaded', () => {
         previewModal.style.display = 'none';
     });
 
-    // Close modal if clicked outside content
     window.addEventListener('click', (event) => {
         if (event.target === previewModal) {
             previewModal.style.display = 'none';
