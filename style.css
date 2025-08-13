@@ -343,9 +343,9 @@ td input[type="number"]::-webkit-outer-spin-button {
 }
 
 .download-invoice-container th {
-    background-color: #3b3b3b; /* Dark background for download headers */
+    background-color: #3b3b3b; /* Dark background for download headers*/
     font-weight: 600;
-    color: #f0f0f0; /* Light text for download headers */
+    color: #f0f0f0; /* Light text for download headers*/
     text-transform: uppercase;
 }
 
