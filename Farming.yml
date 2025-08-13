@@ -1,0 +1,120 @@
+pages:
+  page1:
+    items:
+      '1':
+        buy: 15
+        material: BAMBOO
+        sell: 11.25
+      '10':
+        buy: 180
+        material: CHORUS_FRUIT
+        sell: 135
+      '11':
+        buy: 20
+        material: COCOA_BEANS
+        sell: 15
+      '12':
+        buy: 20
+        material: CRIMSON_FUNGUS
+        sell: 15
+      '13':
+        buy: 18
+        material: EGG
+        sell: 13.5
+      '14':
+        buy: 6
+        material: KELP
+        sell: 4.5
+      '15':
+        buy: 15
+        material: LEATHER
+        sell: 11.25
+      '16':
+        buy: 21
+        material: MELON
+        sell: 15.75
+      '17':
+        buy: 10
+        material: MELON_SEEDS
+        sell: 7.5
+      '18':
+        buy: 7
+        material: MELON_SLICE
+        sell: 5.25
+      '19':
+        buy: 40
+        material: NETHER_WART
+        sell: 30
+      '2':
+        buy: 15
+        material: BEE_NEST
+        sell: 11.25
+      '20':
+        buy: 15
+        material: PITCHER_POD
+        sell: 11.25
+      '21':
+        buy: 15
+        material: POTATO
+        sell: 11.25
+      '22':
+        buy: 15
+        material: PUMPKIN
+        sell: 10.25
+      '23':
+        buy: 12
+        material: PUMPKIN_SEEDS
+        sell: 9
+      '24':
+        buy: 15
+        material: RED_MUSHROOM
+        sell: 11.25
+      '25':
+        buy: 15
+        material: SUGAR_CANE
+        sell: 11.25
+      '26':
+        buy: 15
+        material: TORCHFLOWER_SEEDS
+        sell: 11.25
+      '27':
+        buy: 15
+        material: WARPED_FUNGUS
+        sell: 12.25
+      '28':
+        buy: 5
+        material: WHEAT
+        sell: 3.75
+      '29':
+        buy: 3
+        material: WHEAT_SEEDS
+        sell: 2.25
+      '3':
+        buy: 15
+        material: BEEHIVE
+        sell: 11.25
+      '4':
+        buy: 5
+        material: BEETROOT
+        sell: 3.75
+      '5':
+        buy: 3
+        material: BEETROOT_SEEDS
+        sell: 2.25
+      '6':
+        buy: 15
+        material: BROWN_MUSHROOM
+        sell: 11.25
+      '7':
+        buy: 15
+        material: CACTUS
+        sell: 11.25
+      '8':
+        buy: 7
+        material: CARROT
+        sell: 5.25
+      '9':
+        buy: 15
+        material: CHORUS_FLOWER
+        sell: 11.25
+

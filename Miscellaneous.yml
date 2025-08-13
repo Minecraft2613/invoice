@@ -1,0 +1,284 @@
+pages:
+  page1:
+    items:
+      '1':
+        buy: 900
+        material: ANVIL
+        sell: 733.75
+      '10':
+        buy: 50
+        material: ENDER_EYE
+        sell: 33.45
+      '11':
+        buy: 50
+        material: EXPERIENCE_BOTTLE
+        sell: 35.91
+      '12':
+        buy: 50
+        material: GLOW_INK_SAC
+        sell: 35.9
+      '13':
+        buy: 50
+        material: GLOWSTONE_DUST
+        sell: 35.17
+      '14':
+        buy: 50
+        material: HONEYCOMB
+        sell: 40.44
+      '15':
+        buy: 50
+        material: LAVA_BUCKET
+        sell: 35.45
+      '16':
+        buy: 50
+        material: LEAD
+        sell: 33.77
+      '17':
+        buy: 50
+        material: LILY_PAD
+        sell: 32.74
+      '18':
+        buy: 50
+        material: LODESTONE
+        sell: 39.04
+      '19':
+        buy: 50
+        material: MAP
+        sell: 39.71
+      '2':
+        buy: 50
+        material: AXOLOTL_BUCKET
+        sell: 34.62
+      '20':
+        buy: 50
+        material: MOSS_BLOCK
+        sell: 38.45
+      '21':
+        buy: 50
+        material: NAME_TAG
+        sell: 35.84
+      '22':
+        buy: 5000
+        material: NETHER_STAR
+        sell: 3900.83
+      '23':
+        buy: 50
+        material: POWDER_SNOW_BUCKET
+        sell: 38.18
+      '24':
+        buy: 50
+        material: PUFFERFISH_BUCKET
+        sell: 40.08
+      '25':
+        buy: 50
+        material: RED_BED
+        sell: 38.37
+      '26':
+        buy: 50
+        material: SADDLE
+        sell: 36.25
+      '27':
+        buy: 50
+        material: SALMON_BUCKET
+        sell: 37.1
+      '28':
+        buy: 50
+        material: SCAFFOLDING
+        sell: 33.48
+      '29':
+        buy: 50
+        material: SHULKER_SHELL
+        sell: 38.92
+      '3':
+        buy: 50
+        material: BELL
+        sell: 32.97
+      '30':
+        buy: 50
+        material: SNIFFER_EGG
+        sell: 34.26
+      '31':
+        buy: 50
+        material: SNOW
+        sell: 35.86
+      '32':
+        buy: 50
+        material: SNOWBALL
+        sell: 37.05
+      '33':
+        buy: 50
+        material: SPONGE
+        sell: 39.45
+      '34':
+        buy: 50
+        material: SPYGLASS
+        sell: 36.57
+      '35':
+        buy: 50
+        material: TADPOLE_BUCKET
+        sell: 38.92
+      '36':
+        buy: 4000
+        material: TOTEM_OF_UNDYING
+        sell: 3479.46
+      '37':
+        buy: 500
+        material: TRIDENT
+        sell: 335.25
+      '38':
+        buy: 50
+        material: TROPICAL_FISH_BUCKET
+        sell: 35.93
+      '39':
+        buy: 50
+        material: TURTLE_EGG
+        sell: 36.89
+      '4':
+        buy: 50
+        material: BRUSH
+        sell: 36.52
+      '40':
+        buy: 50
+        material: WARPED_FUNGUS_ON_A_STICK
+        sell: 36.41
+      '41':
+        buy: 50
+        material: WATER_BUCKET
+        sell: 40.61
+      '42':
+        buy: 50
+        material: WIND_CHARGE
+        sell: 35.3
+      '43':
+        buy: 50
+        material: WRITABLE_BOOK
+        sell: 39.57
+      '44':
+        buy: 50
+        material: CREEPER_BANNER_PATTERN
+        sell: 39.48
+      '5':
+        buy: 50
+        material: CARROT_ON_A_STICK
+        sell: 39.91
+      '6':
+        buy: 50
+        material: COBWEB
+        sell: 40.15
+      '7':
+        buy: 50
+        material: COD_BUCKET
+        sell: 34.9
+      '8':
+        buy: 9999
+        material: ELYTRA
+        sell: -1
+      '9':
+        buy: 50
+        material: ENDER_CHEST
+        sell: 37.69
+      '999':
+        buy: 50
+        colors:
+        - cyan
+        - purple
+        duration: 2
+        fade-colors:
+        - black
+        - gray
+        flicker: true
+        material: FIREWORK
+        sell: 32.85
+        shape: BURST
+        trail: true
+  page2:
+    items:
+      '45':
+        buy: 1200
+        material: FLOW_BANNER_PATTERN
+        sell: 300
+      '46':
+        buy: 1.17
+        material: FLOWER_BANNER_PATTERN
+        sell: 0.3
+      '47':
+        buy: 330.75
+        material: GLOBE_BANNER_PATTERN
+        sell: 82.69
+      '48':
+        buy: 800
+        material: GUSTER_BANNER_PATTERN
+        sell: 200
+      '49':
+        buy: 10500.12
+        material: MOJANG_BANNER_PATTERN
+        sell: 2625.03
+      '50':
+        buy: 10000
+        material: PIGLIN_BANNER_PATTERN
+        sell: 2500
+      '51':
+        buy: 1050.12
+        material: SKULL_BANNER_PATTERN
+        sell: 262.53
+      '52':
+        buy: 38.41
+        material: CLOCK
+        sell: 9.61
+      '53':
+        buy: 26.83
+        material: COMPASS
+        sell: 6.71
+      '54':
+        buy: 868.17
+        material: RECOVERY_COMPASS
+        sell: 217.05
+      '55':
+        buy: 10
+        material: BIG_DRIPLEAF
+        sell: 2.5
+      '56':
+        buy: 10
+        material: SMALL_DRIPLEAF
+        sell: 2.5
+      '57':
+        buy: 3999
+        material: BEACON
+        sell: -1
+      '58':
+        buy: 300
+        material: END_ROD
+        sell: -1
+      '59':
+        buy: 36.5
+        material: LANTERN
+        sell: 1.63
+      '60':
+        buy: 9.26
+        material: SOUL_LANTERN
+        sell: 2.32
+      '61':
+        buy: 16.79
+        material: CAMPFIRE
+        sell: 4.2
+      '62':
+        buy: 21.78
+        material: SOUL_CAMPFIRE
+        sell: 5.45
+      '63':
+        buy: 12
+        material: SCULK
+        sell: 3
+      '64':
+        buy: 500
+        material: SCULK_CATALYST
+        sell: 250
+      '65':
+        buy: 2000
+        material: SCULK_SHRIEKER
+        sell: 5000
+      '66':
+        buy: 1750
+        material: OMINOUS_BOTTLE
+        ominous-strength: 5
+        sell: 875

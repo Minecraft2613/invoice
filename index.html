@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Shop Invoice</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <div class="invoice-container">
+        <div class="header">
+            <h1 id="invoice-title">Selling Invoice</h1>
+            <div class="toggle-switch">
+                <input type="checkbox" id="buy-sell-toggle">
+                <label for="buy-sell-toggle" class="slider"></label>
+            </div>
+            <div class="search-section">
+                <input type="text" id="item-search" placeholder="Search for a block...">
+            </div>
+        </div>
+        
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Material Name</th>
+                        <th>Quantity</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody id="item-list">
+                    </tbody>
+            </table>
+        </div>
+
+        <div class="summary">
+            <div class="tax-row">
+                <label for="tax-input">Tax %:</label>
+                <input type="number" id="tax-input" value="10" min="0" max="100">
+                <span>(Total Tax: <span id="total-tax">0</span>)</span>
+            </div>
+            <div class="tax-row">
+                <label for="gst-input">GST %:</label>
+                <input type="number" id="gst-input" value="5" min="0" max="100">
+                <span>(Total GST: <span id="total-gst">0</span>)</span>
+            </div>
+            <div class="total-row">
+                <strong>Total Amount:</strong>
+                <span id="final-total">0</span>
+            </div>
+        </div>
+
+        <div class="invoice-buttons">
+            <button id="preview-button">Preview Invoice</button>
+            <button id="download-button">Download Invoice</button>
+        </div>
+    </div>
+    
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div id="invoice-preview-area"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

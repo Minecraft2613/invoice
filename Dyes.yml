@@ -1,0 +1,131 @@
+pages:
+  page1:
+    items:
+      '1':
+        buy: 5
+        material: BLACK_DYE
+        sell: 3.94
+      '10':
+        buy: 15
+        material: MAGENTA_DYE
+        sell: 12.07
+      '11':
+        buy: 10
+        material: ORANGE_DYE
+        sell: 8.02
+      '12':
+        buy: 10
+        material: PINK_DYE
+        sell: 7.92
+      '13':
+        buy: 15
+        material: PURPLE_DYE
+        sell: 11.84
+      '14':
+        buy: 5
+        material: RED_DYE
+        sell: 3.3
+      '15':
+        buy: 5
+        material: WHITE_DYE
+        sell: 3.6
+      '16':
+        buy: 5
+        material: YELLOW_DYE
+        sell: 4.02
+      '17':
+        buy: 10
+        material: AZURE_BLUET
+        sell: 8.0
+      '18':
+        buy: 10
+        material: BLUE_ORCHID
+        sell: 7.09
+      '19':
+        buy: 10
+        material: CORNFLOWER
+        sell: 7.4
+      '2':
+        buy: 15
+        material: BLUE_DYE
+        sell: 10.09
+      '20':
+        buy: 10
+        material: LILAC
+        sell: 6.67
+      '21':
+        buy: 10
+        material: LILY_OF_THE_VALLEY
+        sell: 8.01
+      '22':
+        buy: 10
+        material: ORANGE_TULIP
+        sell: 6.79
+      '23':
+        buy: 10
+        material: OXEYE_DAISY
+        sell: 7.07
+      '24':
+        buy: 10
+        material: PEONY
+        sell: 7.16
+      '25':
+        buy: 10
+        material: PINK_PETALS
+        sell: 8.07
+      '26':
+        buy: 10
+        material: PINK_TULIP
+        sell: 6.64
+      '27':
+        buy: 10
+        material: PITCHER_PLANT
+        sell: 8.1
+      '28':
+        buy: 10
+        material: POPPY
+        sell: 7.98
+      '29':
+        buy: 10
+        material: RED_TULIP
+        sell: 6.57
+      '3':
+        buy: 10
+        material: BROWN_DYE
+        sell: 7.88
+      '30':
+        buy: 10
+        material: SUNFLOWER
+        sell: 8.19
+      '31':
+        buy: 10
+        material: TORCHFLOWER
+        sell: 7.37
+      '32':
+        buy: 10
+        material: INK_SAC
+        sell: 7.69
+      '4':
+        buy: 15
+        material: CYAN_DYE
+        sell: 9.81
+      '5':
+        buy: 10
+        material: GRAY_DYE
+        sell: 7.52
+      '6':
+        buy: 5
+        material: GREEN_DYE
+        sell: 3.92
+      '7':
+        buy: 10
+        material: LIGHT_BLUE_DYE
+        sell: 6.8
+      '8':
+        buy: 10
+        material: LIGHT_GRAY_DYE
+        sell: 6.54
+      '9':
+        buy: 10
+        material: LIME_DYE
+        sell: 7.25
