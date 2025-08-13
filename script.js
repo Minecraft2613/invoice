@@ -231,7 +231,12 @@ document.addEventListener('DOMContentLoaded', () => {
     previewButton.addEventListener('click', previewInvoice);
 
     downloadButton.addEventListener('click', () => {
-        // Target the invoicePreview div for download, as it contains the clean invoice structure
+        // Temporarily make the invoicePreview visible and off-screen for html2canvas capture
+        invoicePreview.style.display = 'block';
+        invoicePreview.style.position = 'absolute';
+        invoicePreview.style.left = '-9999px';
+        invoicePreview.style.top = '-9999px';
+
         html2canvas(invoicePreview, {
             scale: 2, // Increase scale for better quality image
             backgroundColor: '#2b2b2b' // Match modal background
@@ -240,6 +245,12 @@ document.addEventListener('DOMContentLoaded', () => {
             link.download = 'invoice.png';
             link.href = canvas.toDataURL();
             link.click();
+        }).finally(() => {
+            // Hide the invoicePreview again after capture
+            invoicePreview.style.display = 'none';
+            invoicePreview.style.position = '';
+            invoicePreview.style.left = '';
+            invoicePreview.style.top = '';
         });
     });
 
