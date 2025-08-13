@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const invoicePreview = document.getElementById('invoicePreview');
     const previewModal = document.getElementById('previewModal');
     const closeModalButton = previewModal.querySelector('.close-button');
+    const cartSummaryList = document.getElementById('cart-summary-list'); // New: Selected items display tbody
 
     // List of YAML files to fetch
     const fileList = ['Blocks.yml.old.yml']; // Add other YAML files here, e.g., 'Ores.yml'
@@ -101,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 updateBill();
                 updateItemCost(row, item.name);
+                updateSelectedItemsDisplay(); // Update the selected items section
             });
             quantityCell.appendChild(quantityInput);
 
@@ -135,6 +137,31 @@ document.addEventListener('DOMContentLoaded', () => {
             costCell.textContent = (price * cart[itemName].quantity).toFixed(2);
         } else {
             costCell.textContent = '0.00';
+        }
+    }
+
+    // Function to update the display of selected items above subtotal
+    function updateSelectedItemsDisplay() {
+        cartSummaryList.innerHTML = ''; // Clear current display
+
+        if (Object.keys(cart).length === 0) {
+            cartSummaryList.innerHTML = '<tr><td colspan="3" class="text-center">No items added yet.</td></tr>';
+            return;
+        }
+
+        const isBuying = buySellToggle.checked;
+
+        for (const itemName in cart) {
+            const item = cart[itemName];
+            const price = isBuying ? item.buy_price : item.sell_price;
+            const itemCost = price * item.quantity;
+
+            const row = cartSummaryList.insertRow();
+            row.innerHTML = `
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+                <td>${itemCost.toFixed(2)}</td>
+            `;
         }
     }
 
@@ -260,6 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         updateBill();
+        updateSelectedItemsDisplay(); // Update the selected items section
     });
 
     previewButton.addEventListener('click', previewInvoice);
@@ -370,4 +398,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial data fetch and display
     fetchAndParseYamlFiles();
+    updateSelectedItemsDisplay(); // Initial call to display selected items (if any from previous session)
 });
