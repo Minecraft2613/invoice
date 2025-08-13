@@ -8,78 +8,68 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container-fluid mt-4">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h2>Minecraft Blocks</h2>
-                    <input type="text" id="searchInput" class="form-control w-25" placeholder="Search blocks...">
-                </div>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Material Name</th>
-                            <th style="width: 150px;">Quantity</th>
-                            <th style="width: 150px;">Cost</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="itemList">
-                        <!-- Items will be loaded here by JavaScript -->
-                    </tbody>
-                </table>
+    <div class="invoice-container">
+        <div class="header">
+            <h1 id="invoice-title">Buying Invoice</h1>
+            <label class="toggle-switch">
+                <input type="checkbox" id="buySellToggle" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="search-section">
+            <input type="text" id="item-search" placeholder="Search blocks...">
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Material Name</th>
+                        <th style="width: 150px;">Quantity</th>
+                        <th style="width: 150px;">Cost</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="item-list">
+                    <!-- Items will be loaded here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="summary">
+            <div class="tax-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">0.00</span>
             </div>
-            <div class="col-md-4">
-                <h2>Bill Summary</h2>
-                <div id="billSummary" class="p-3 border rounded">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Subtotal:</span>
-                        <span id="subtotal">0.00</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>GST (%):</span>
-                        <input type="number" id="gstInput" class="form-control-sm text-end" value="5" style="width: 80px;">
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>GST Amount:</span>
-                        <span id="gstAmount">0.00</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>Tax (%):</span>
-                        <input type="number" id="taxInput" class="form-control-sm text-end" value="2" style="width: 80px;">
-                    </div>
-                    <div class="d-flex justify-content="between mb-2">
-                        <span>Tax Amount:</span>
-                        <span id="taxAmount">0.00</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between fw-bold fs-5">
-                        <span>Total Amount:</span>
-                        <span id="totalAmount">0.00</span>
-                    </div>
-                </div>
-                <div class="mt-3 text-center">
-                    <button id="previewBtn" class="btn btn-secondary me-2">Preview Bill</button>
-                    <button id="downloadBtn" class="btn btn-success">Download Bill Image</button>
-                </div>
+            <div class="tax-row">
+                <label for="gstInput">GST (%):</label>
+                <input type="number" id="gstInput" value="5">
+                <span><span id="gstAmount">0.00</span></span>
             </div>
+            <div class="tax-row">
+                <label for="taxInput">Tax (%):</label>
+                <input type="number" id="taxInput" value="2">
+                <span><span id="taxAmount">0.00</span></span>
+            </div>
+            <div class="total-row">
+                <strong>Total Amount:</strong>
+                <span id="totalAmount">0.00</span>
+            </div>
+        </div>
+
+        <div class="invoice-buttons">
+            <button id="preview-button">Preview Bill</button>
+            <button id="download-button">Download Bill Image</button>
         </div>
     </div>
 
     <!-- Preview Modal -->
-    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="previewModalLabel">Invoice Preview</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="invoicePreview">
-                    <!-- Invoice content will be generated here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div id="invoicePreview">
+                <!-- Invoice content will be generated here -->
             </div>
         </div>
     </div>
