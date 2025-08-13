@@ -3,69 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Shop Invoice</title>
+    <title>Minecraft Shop Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-
-    <div class="invoice-container">
-        <div class="header">
-            <h1 id="invoice-title">Selling Invoice</h1>
-            <div class="toggle-switch">
-                <input type="checkbox" id="buy-sell-toggle">
-                <label for="buy-sell-toggle" class="slider"></label>
-            </div>
-            <div class="search-section">
-                <input type="text" id="item-search" placeholder="Search for a block...">
-            </div>
-        </div>
-        
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Material Name</th>
-                        <th>Quantity</th>
-                        <th>Cost</th>
-                    </tr>
-                </thead>
-                <tbody id="item-list">
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2>Minecraft Blocks</h2>
+                    <input type="text" id="searchInput" class="form-control w-25" placeholder="Search blocks...">
+                </div>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Material Name</th>
+                            <th style="width: 150px;">Quantity</th>
+                            <th style="width: 150px;">Cost</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemList">
+                        <!-- Items will be loaded here by JavaScript -->
                     </tbody>
-            </table>
-        </div>
-
-        <div class="summary">
-            <div class="tax-row">
-                <label for="tax-input">Tax %:</label>
-                <input type="number" id="tax-input" value="10" min="0" max="100">
-                <span>(Total Tax: <span id="total-tax">0</span>)</span>
+                </table>
             </div>
-            <div class="tax-row">
-                <label for="gst-input">GST %:</label>
-                <input type="number" id="gst-input" value="5" min="0" max="100">
-                <span>(Total GST: <span id="total-gst">0</span>)</span>
+            <div class="col-md-4">
+                <h2>Bill Summary</h2>
+                <div id="billSummary" class="p-3 border rounded">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>GST (%):</span>
+                        <input type="number" id="gstInput" class="form-control-sm text-end" value="5" style="width: 80px;">
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>GST Amount:</span>
+                        <span id="gstAmount">0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Tax (%):</span>
+                        <input type="number" id="taxInput" class="form-control-sm text-end" value="2" style="width: 80px;">
+                    </div>
+                    <div class="d-flex justify-content="between mb-2">
+                        <span>Tax Amount:</span>
+                        <span id="taxAmount">0.00</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between fw-bold fs-5">
+                        <span>Total Amount:</span>
+                        <span id="totalAmount">0.00</span>
+                    </div>
+                </div>
+                <div class="mt-3 text-center">
+                    <button id="previewBtn" class="btn btn-secondary me-2">Preview Bill</button>
+                    <button id="downloadBtn" class="btn btn-success">Download Bill Image</button>
+                </div>
             </div>
-            <div class="total-row">
-                <strong>Total Amount:</strong>
-                <span id="final-total">0</span>
-            </div>
-        </div>
-
-        <div class="invoice-buttons">
-            <button id="preview-button">Preview Invoice</button>
-            <button id="download-button">Download Invoice</button>
         </div>
     </div>
-    
-    <div id="preview-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <div id="invoice-preview-area"></div>
+
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewModalLabel">Invoice Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="invoicePreview">
+                    <!-- Invoice content will be generated here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

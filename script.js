@@ -1,1443 +1,220 @@
-const shopData = {
-  "pages": {
-    "page1": {
-      "items": {
-        "1": {
-          "material": "CALCITE",
-          "buy": 2,
-          "sell": 0.5
-        },
-        "2": {
-          "material": "DRIPSTONE_BLOCK",
-          "buy": 1,
-          "sell": 0.25
-        },
-        "3": {
-          "material": "HAY_BLOCK",
-          "buy": 47.25,
-          "sell": 11.82
-        },
-        "4": {
-          "material": "HONEY_BLOCK",
-          "buy": 33.34,
-          "sell": 8.34
-        },
-        "5": {
-          "material": "MAGMA_BLOCK",
-          "buy": 33.63,
-          "sell": 8.41
-        },
-        "6": {
-          "material": "PACKED_ICE",
-          "buy": 13.5,
-          "sell": 3.38
-        },
-        "7": {
-          "material": "ROOTED_DIRT",
-          "buy": 1,
-          "sell": 0.25
-        },
-        "8": {
-          "material": "SLIME_BLOCK",
-          "buy": 47.25,
-          "sell": 11.82
-        },
-        "9": {
-          "material": "SNOW_BLOCK",
-          "buy": 12.6,
-          "sell": 3.15
-        },
-        "10": {
-          "material": "SOUL_SAND",
-          "buy": 10,
-          "sell": 2.5
-        },
-        "11": {
-          "material": "TNT",
-          "buy": 106.58,
-          "sell": 26.65
-        },
-        "12": {
-          "material": "ANDESITE",
-          "buy": 0.72,
-          "sell": 0.18
-        },
-        "13": {
-          "material": "ANDESITE_SLAB",
-          "buy": 0.38,
-          "sell": 0.1
-        },
-        "14": {
-          "material": "ANDESITE_STAIRS",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "15": {
-          "material": "POLISHED_ANDESITE",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "16": {
-          "material": "POLISHED_ANDESITE_SLAB",
-          "buy": 0.38,
-          "sell": 0.1
-        },
-        "17": {
-          "material": "POLISHED_ANDESITE_STAIRS",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "18": {
-          "material": "BAMBOO_BLOCK",
-          "buy": 0.95,
-          "sell": 0.24
-        },
-        "19": {
-          "material": "BAMBOO_MOSAIC",
-          "buy": 0.55,
-          "sell": 0.14
-        },
-        "20": {
-          "material": "BAMBOO_MOSAIC_SLAB",
-          "buy": 0.29,
-          "sell": 0.08
-        },
-        "21": {
-          "material": "BAMBOO_MOSAIC_STAIRS",
-          "buy": 0.79,
-          "sell": 0.2
-        },
-        "22": {
-          "material": "BAMBOO_PLANKS",
-          "buy": 0.5,
-          "sell": 0.13
-        },
-        "23": {
-          "material": "BAMBOO_SLAB",
-          "buy": 0.27,
-          "sell": 0.07
-        },
-        "24": {
-          "material": "BAMBOO_STAIRS",
-          "buy": 0.79,
-          "sell": 0.2
-        },
-        "26": {
-          "material": "BLACKSTONE",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "27": {
-          "material": "BLACKSTONE_SLAB",
-          "buy": 0.4,
-          "sell": 0.1
-        },
-        "28": {
-          "material": "BLACKSTONE_STAIRS",
-          "buy": 0.79,
-          "sell": 0.2
-        },
-        "29": {
-          "material": "POLISHED_BLACKSTONE",
-          "buy": 0.79,
-          "sell": 0.2
-        },
-        "30": {
-          "material": "POLISHED_BLACKSTONE_BRICK_SLAB",
-          "buy": 0.4,
-          "sell": 0.1
-        },
-        "31": {
-          "material": "POLISHED_BLACKSTONE_BRICK_STAIRS",
-          "buy": 0.79,
-          "sell": 0.2
-        },
-        "32": {
-          "material": "POLISHED_BLACKSTONE_BRICKS",
-          "buy": 0.79,
-          "sell": 0.2
-        },
-        "33": {
-          "material": "POLISHED_BLACKSTONE_SLAB",
-          "buy": 0.4,
-          "sell": 0.1
-        },
-        "34": {
-          "material": "POLISHED_BLACKSTONE_STAIRS",
-          "buy": 0.79,
-          "sell": 0.2
-        },
-        "35": {
-          "material": "BOOKSHELF",
-          "buy": 119.12,
-          "sell": 29.78
-        },
-        "36": {
-          "material": "CHISELED_BOOKSHELF",
-          "buy": 8.77,
-          "sell": 2.2
-        },
-        "37": {
-          "material": "BRICK_SLAB",
-          "buy": 48.63,
-          "sell": 12.16
-        },
-        "38": {
-          "material": "BRICK_STAIRS",
-          "buy": 97.25,
-          "sell": 24.32
-        },
-        "39": {
-          "material": "BRICKS",
-          "buy": 92.61,
-          "sell": 23.16
-        },
-        "50": {
-          "material": "BASALT",
-          "buy": 40,
-          "sell": 10
-        },
-        "51": {
-          "material": "COBBLESTONE",
-          "buy": 0.68,
-          "sell": 0.17
-        },
-        "52": {
-          "material": "COBBLESTONE_SLAB",
-          "buy": 0.36,
-          "sell": 0.09
-        },
-        "53": {
-          "material": "COBBLESTONE_STAIRS",
-          "buy": 0.72,
-          "sell": 0.18
-        },
-        "54": {
-          "material": "MOSSY_COBBLESTONE",
-          "buy": 8.07,
-          "sell": 2.02
-        },
-        "55": {
-          "material": "MOSSY_COBBLESTONE_SLAB",
-          "buy": 4.24,
-          "sell": 1.06
-        },
-        "56": {
-          "material": "MOSSY_COBBLESTONE_STAIRS",
-          "buy": 8.47,
-          "sell": 2.12
-        }
-      }
-    },
-    "page2": {
-      "items": {
-        "57": {
-          "material": "BLACK_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "58": {
-          "material": "BLUE_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "59": {
-          "material": "BROWN_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "60": {
-          "material": "CYAN_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "61": {
-          "material": "GRAY_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "62": {
-          "material": "GREEN_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "63": {
-          "material": "LIGHT_BLUE_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "64": {
-          "material": "LIGHT_GRAY_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "65": {
-          "material": "LIME_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "66": {
-          "material": "MAGENTA_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "67": {
-          "material": "ORANGE_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "68": {
-          "material": "PINK_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "69": {
-          "material": "PURPLE_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "70": {
-          "material": "RED_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "71": {
-          "material": "WHITE_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "72": {
-          "material": "YELLOW_CONCRETE",
-          "buy": 1.46,
-          "sell": 1.37
-        },
-        "73": {
-          "material": "CHISELED_COPPER",
-          "buy": 1.26,
-          "sell": 0.26
-        },
-        "74": {
-          "material": "EXPOSED_CHISELED_COPPER",
-          "buy": 1.07,
-          "sell": 0.27
-        },
-        "75": {
-          "material": "OXIDIZED_CHISELED_COPPER",
-          "buy": 1.18,
-          "sell": 0.3
-        },
-        "76": {
-          "material": "OXIDIZED_COPPER",
-          "buy": 4.47,
-          "sell": 1.12
-        },
-        "77": {
-          "material": "WAXED_COPPER_BLOCK",
-          "buy": 7.36,
-          "sell": 1.84
-        },
-        "78": {
-          "material": "WAXED_CUT_COPPER",
-          "buy": 1.94,
-          "sell": 0.49
-        },
-        "79": {
-          "material": "WAXED_CUT_COPPER_SLAB",
-          "buy": 0.97,
-          "sell": 0.25
-        },
-        "80": {
-          "material": "WAXED_CUT_COPPER_STAIRS",
-          "buy": 1.94,
-          "sell": 0.49
-        },
-        "81": {
-          "material": "WAXED_EXPOSED_COPPER",
-          "buy": 7.57,
-          "sell": 1.9
-        },
-        "82": {
-          "material": "WAXED_EXPOSED_CUT_COPPER",
-          "buy": 7.94,
-          "sell": 1.23
-        },
-        "83": {
-          "material": "WAXED_EXPOSED_CUT_COPPER_SLAB",
-          "buy": 1,
-          "sell": 0.25
-        },
-        "84": {
-          "material": "WAXED_EXPOSED_CUT_COPPER_STAIRS",
-          "buy": 1.99,
-          "sell": 0.5
-        },
-        "85": {
-          "material": "WAXED_OXIDIZED_COPPER",
-          "buy": 8,
-          "sell": 2
-        },
-        "86": {
-          "material": "WAXED_OXIDIZED_CUT_COPPER",
-          "buy": 8.4,
-          "sell": 1.7
-        },
-        "87": {
-          "material": "WAXED_OXIDIZED_CUT_COPPER_SLAB",
-          "buy": 1.05,
-          "sell": 0.27
-        },
-        "88": {
-          "material": "WAXED_OXIDIZED_CUT_COPPER_STAIRS",
-          "buy": 2.1,
-          "sell": 0.53
-        },
-        "89": {
-          "material": "WAXED_WEATHERED_COPPER",
-          "buy": 7.78,
-          "sell": 1.95
-        },
-        "90": {
-          "material": "WAXED_WEATHERED_CUT_COPPER",
-          "buy": 8.17,
-          "sell": 1.38
-        },
-        "91": {
-          "material": "WAXED_WEATHERED_CUT_COPPER_SLAB",
-          "buy": 1.03,
-          "sell": 0.26
-        },
-        "92": {
-          "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
-          "buy": 2.05,
-          "sell": 0.52
-        },
-        "93": {
-          "material": "WEATHERED_CHISELED_COPPER",
-          "buy": 1.12,
-          "sell": 0.28
-        },
-        "94": {
-          "material": "COBBLED_DEEPSLATE",
-          "buy": 0.68,
-          "sell": 0.17
-        },
-        "95": {
-          "material": "COBBLED_DEEPSLATE_SLAB",
-          "buy": 0.36,
-          "sell": 0.09
-        },
-        "96": {
-          "material": "COBBLED_DEEPSLATE_STAIRS",
-          "buy": 0.72,
-          "sell": 0.18
-        },
-        "97": {
-          "material": "DEEPSLATE",
-          "buy": 0.72,
-          "sell": 0.18
-        },
-        "98": {
-          "material": "DEEPSLATE_TILE_SLAB",
-          "buy": 0.42,
-          "sell": 0.11
-        },
-        "99": {
-          "material": "DEEPSLATE_TILE_STAIRS",
-          "buy": 0.83,
-          "sell": 0.21
-        },
-        "100": {
-          "material": "DEEPSLATE_TILES",
-          "buy": 0.79,
-          "sell": 0.2
-        },
-        "101": {
-          "material": "DIORITE",
-          "buy": 0.72,
-          "sell": 0.18
-        }
-      }
-    },
-    "page3": {
-      "items": {
-        "102": {
-          "material": "DIORITE_SLAB",
-          "buy": 0.38,
-          "sell": 0.1
-        },
-        "103": {
-          "material": "DIORITE_STAIRS",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "104": {
-          "material": "POLISHED_DIORITE",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "105": {
-          "material": "POLISHED_DIORITE_SLAB",
-          "buy": 0.38,
-          "sell": 0.1
-        },
-        "106": {
-          "material": "POLISHED_DIORITE_STAIRS",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "107": {
-          "material": "CLAY",
-          "buy": 21,
-          "sell": 5.25
-        },
-        "108": {
-          "material": "CRIMSON_NYLIUM",
-          "buy": 6,
-          "sell": 1.5
-        },
-        "109": {
-          "material": "DIRT",
-          "buy": 3,
-          "sell": 0.75
-        },
-        "110": {
-          "material": "GRASS_BLOCK",
-          "buy": 8,
-          "sell": 2
-        },
-        "111": {
-          "material": "GRAVEL",
-          "buy": 8,
-          "sell": 2
-        },
-        "112": {
-          "material": "MYCELIUM",
-          "buy": 8,
-          "sell": 2
-        },
-        "113": {
-          "material": "PODZOL",
-          "buy": 8,
-          "sell": 2
-        },
-        "114": {
-          "material": "WARPED_NYLIUM",
-          "buy": 6,
-          "sell": 1.5
-        },
-        "115": {
-          "material": "END_STONE",
-          "buy": 5,
-          "sell": 1.25
-        },
-        "116": {
-          "material": "END_STONE_BRICK_SLAB",
-          "buy": 2.63,
-          "sell": 0.66
-        },
-        "117": {
-          "material": "END_STONE_BRICK_STAIRS",
-          "buy": 5.25,
-          "sell": 1.32
-        },
-        "118": {
-          "material": "END_STONE_BRICKS",
-          "buy": 5.25,
-          "sell": 1.32
-        },
-        "119": {
-          "material": "GLASS",
-          "buy": 6.3,
-          "sell": 1.58
-        },
-        "120": {
-          "material": "GLASS_PANE",
-          "buy": 2.49,
-          "sell": 0.63
-        },
-        "121": {
-          "material": "TINTED_GLASS",
-          "buy": 6.07,
-          "sell": 1.52
-        },
-        "122": {
-          "material": "GRANITE",
-          "buy": 0.72,
-          "sell": 0.18
-        },
-        "123": {
-          "material": "GRANITE_SLAB",
-          "buy": 0.38,
-          "sell": 0.1
-        },
-        "124": {
-          "material": "GRANITE_STAIRS",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "125": {
-          "material": "POLISHED_GRANITE",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "126": {
-          "material": "POLISHED_GRANITE_SLAB",
-          "buy": 0.38,
-          "sell": 0.1
-        },
-        "127": {
-          "material": "POLISHED_GRANITE_STAIRS",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "128": {
-          "material": "GLOWSTONE",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "129": {
-          "material": "MUD",
-          "buy": 3.19,
-          "sell": 0.8
-        },
-        "130": {
-          "material": "MUD_BRICK_SLAB",
-          "buy": 4.74,
-          "sell": 1.19
-        },
-        "131": {
-          "material": "MUD_BRICK_STAIRS",
-          "buy": 9.48,
-          "sell": 2.37
-        },
-        "132": {
-          "material": "MUD_BRICK_WALL",
-          "buy": 9.48,
-          "sell": 2.37
-        },
-        "133": {
-          "material": "MUD_BRICKS",
-          "buy": 9.03,
-          "sell": 2.26
-        },
-        "134": {
-          "material": "PACKED_MUD",
-          "buy": 8.6,
-          "sell": 2.15
-        },
-        "135": {
-          "material": "NETHERRACK",
-          "buy": 0.2,
-          "sell": 0.05
-        },
-        "136": {
-          "material": "NETHER_BRICK_SLAB",
-          "buy": 0.47,
-          "sell": 0.12
-        },
-        "137": {
-          "material": "NETHER_BRICK_STAIRS",
-          "buy": 0.93,
-          "sell": 0.24
-        },
-        "138": {
-          "material": "NETHER_BRICKS",
-          "buy": 0.89,
-          "sell": 0.23
-        },
-        "139": {
-          "material": "RED_NETHER_BRICK_SLAB",
-          "buy": 4.28,
-          "sell": 1.07
-        },
-        "140": {
-          "material": "RED_NETHER_BRICK_STAIRS",
-          "buy": 8.56,
-          "sell": 2.14
-        },
-        "141": {
-          "material": "RED_NETHER_BRICKS",
-          "buy": 8.16,
-          "sell": 2.04
-        },
-        "142": {
-          "material": "CRYING_OBSIDIAN",
-          "buy": 62.5,
-          "sell": 15.63
-        },
-        "143": {
-          "material": "OBSIDIAN",
-          "buy": 31.25,
-          "sell": 7.82
-        },
-        "144": {
-          "material": "PRISMARINE",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "145": {
-          "material": "PRISMARINE_SLAB",
-          "buy": 15.44,
-          "sell": 3.86
-        },
-        "146": {
-          "material": "PRISMARINE_STAIRS",
-          "buy": 30.87,
-          "sell": 7.72
-        }
-      }
-    },
-    "page4": {
-      "items": {
-        "147": {
-          "material": "PRISMARINE_BRICK_SLAB",
-          "buy": 34.73,
-          "sell": 8.69
-        },
-        "148": {
-          "material": "PRISMARINE_BRICK_STAIRS",
-          "buy": 69.46,
-          "sell": 17.37
-        },
-        "149": {
-          "material": "PRISMARINE_BRICKS",
-          "buy": 66.15,
-          "sell": 16.54
-        },
-        "150": {
-          "material": "DARK_PRISMARINE",
-          "buy": 64.05,
-          "sell": 16.02
-        },
-        "151": {
-          "material": "DARK_PRISMARINE_SLAB",
-          "buy": 33.63,
-          "sell": 8.41
-        },
-        "152": {
-          "material": "DARK_PRISMARINE_STAIRS",
-          "buy": 67.26,
-          "sell": 16.82
-        },
-        "153": {
-          "material": "PURPUR_BLOCK",
-          "buy": 3.31,
-          "sell": 0.83
-        },
-        "154": {
-          "material": "PURPUR_SLAB",
-          "buy": 1.74,
-          "sell": 0.44
-        },
-        "155": {
-          "material": "PURPUR_STAIRS",
-          "buy": 3.48,
-          "sell": 0.87
-        },
-        "156": {
-          "material": "QUARTZ_BRICKS",
-          "buy": 36.47,
-          "sell": 9.12
-        },
-        "157": {
-          "material": "QUARTZ_SLAB",
-          "buy": 18.24,
-          "sell": 4.56
-        },
-        "158": {
-          "material": "QUARTZ_STAIRS",
-          "buy": 36.47,
-          "sell": 9.12
-        },
-        "159": {
-          "material": "RED_SAND",
-          "buy": 8,
-          "sell": 2
-        },
-        "160": {
-          "material": "SAND",
-          "buy": 6,
-          "sell": 1.5
-        },
-        "161": {
-          "material": "SANDSTONE",
-          "buy": 12,
-          "sell": 3
-        },
-        "162": {
-          "material": "SANDSTONE_SLAB",
-          "buy": 6.3,
-          "sell": 1.58
-        },
-        "163": {
-          "material": "SANDSTONE_STAIRS",
-          "buy": 12.6,
-          "sell": 3.15
-        },
-        "164": {
-          "material": "SMOOTH_SANDSTONE",
-          "buy": 12.6,
-          "sell": 3.15
-        },
-        "165": {
-          "material": "SMOOTH_SANDSTONE_SLAB",
-          "buy": 6.62,
-          "sell": 1.66
-        },
-        "166": {
-          "material": "SMOOTH_SANDSTONE_STAIRS",
-          "buy": 13.23,
-          "sell": 3.31
-        },
-        "167": {
-          "material": "RED_SANDSTONE",
-          "buy": 33.6,
-          "sell": 8.4
-        },
-        "168": {
-          "material": "RED_SANDSTONE_SLAB",
-          "buy": 17.64,
-          "sell": 4.41
-        },
-        "169": {
-          "material": "RED_SANDSTONE_STAIRS",
-          "buy": 35.28,
-          "sell": 8.82
-        },
-        "170": {
-          "material": "SMOOTH_RED_SANDSTONE",
-          "buy": 35.28,
-          "sell": 8.82
-        },
-        "171": {
-          "material": "SMOOTH_RED_SANDSTONE_SLAB",
-          "buy": 18.53,
-          "sell": 4.64
-        },
-        "172": {
-          "material": "SMOOTH_RED_SANDSTONE_STAIRS",
-          "buy": 37.05,
-          "sell": 9.27
-        },
-        "173": {
-          "material": "STONE",
-          "buy": 0.72,
-          "sell": 0.18
-        },
-        "174": {
-          "material": "STONE_SLAB",
-          "buy": 0.38,
-          "sell": 0.1
-        },
-        "175": {
-          "material": "STONE_STAIRS",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "176": {
-          "material": "STONE_BRICK_SLAB",
-          "buy": 0.38,
-          "sell": 0.1
-        },
-        "177": {
-          "material": "STONE_BRICK_STAIRS",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "178": {
-          "material": "STONE_BRICKS",
-          "buy": 0.75,
-          "sell": 0.19
-        },
-        "179": {
-          "material": "MOSSY_STONE_BRICK_SLAB",
-          "buy": 0.4,
-          "sell": 0.1
-        },
-        "180": {
-          "material": "MOSSY_STONE_BRICK_STAIRS",
-          "buy": 8.55,
-          "sell": 2.14
-        },
-        "181": {
-          "material": "MOSSY_STONE_BRICKS",
-          "buy": 8.14,
-          "sell": 2.04
-        },
-        "182": {
-          "material": "TERRACOTTA",
-          "buy": 22.05,
-          "sell": 5.52
-        },
-        "183": {
-          "material": "CHISELED_TUFF",
-          "buy": 2.1,
-          "sell": 0.53
-        },
-        "184": {
-          "material": "CHISELED_TUFF_BRICKS",
-          "buy": 2.1,
-          "sell": 0.53
-        },
-        "185": {
-          "material": "POLISHED_TUFF",
-          "buy": 2.1,
-          "sell": 0.53
-        },
-        "186": {
-          "material": "POLISHED_TUFF_SLAB",
-          "buy": 1.05,
-          "sell": 0.27
-        },
-        "187": {
-          "material": "POLISHED_TUFF_STAIRS",
-          "buy": 2.1,
-          "sell": 0.53
-        },
-        "188": {
-          "material": "TUFF",
-          "buy": 2,
-          "sell": 0.5
-        },
-        "189": {
-          "material": "TUFF_BRICK_SLAB",
-          "buy": 1.05,
-          "sell": 0.27
-        },
-        "190": {
-          "material": "TUFF_BRICK_STAIRS",
-          "buy": 2.1,
-          "sell": 0.53
-        },
-        "191": {
-          "material": "TUFF_BRICKS",
-          "buy": 2.1,
-          "sell": 0.53
-        }
-      }
-    },
-    "page5": {
-      "items": {
-        "192": {
-          "material": "TUFF_SLAB",
-          "buy": 1.05,
-          "sell": 0.27
-        },
-        "193": {
-          "material": "TUFF_STAIRS",
-          "buy": 2.1,
-          "sell": 0.53
-        },
-        "194": {
-          "material": "ACACIA_LOG",
-          "buy": 6,
-          "sell": 4
-        },
-        "195": {
-          "material": "ACACIA_PLANKS",
-          "buy": 1.5,
-          "sell": 1
-        },
-        "196": {
-          "material": "ACACIA_SLAB",
-          "buy": 0.75,
-          "sell": 0.5
-        },
-        "197": {
-          "material": "ACACIA_STAIRS",
-          "buy": 2.25,
-          "sell": 1.5
-        },
-        "198": {
-          "material": "ACACIA_WOOD",
-          "buy": 8,
-          "sell": 5.33
-        },
-        "199": {
-          "material": "BIRCH_LOG",
-          "buy": 4,
-          "sell": 2.5
-        },
-        "200": {
-          "material": "BIRCH_PLANKS",
-          "buy": 1,
-          "sell": 0.62
-        },
-        "201": {
-          "material": "BIRCH_SLAB",
-          "buy": 0.5,
-          "sell": 0.31
-        },
-        "202": {
-          "material": "BIRCH_STAIRS",
-          "buy": 1.5,
-          "sell": 0.93
-        },
-        "203": {
-          "material": "BIRCH_WOOD",
-          "buy": 5.33,
-          "sell": 3.33
-        },
-        "204": {
-          "material": "CRIMSON_HYPHAE",
-          "buy": 8,
-          "sell": 5
-        },
-        "205": {
-          "material": "CRIMSON_PLANKS",
-          "buy": 2,
-          "sell": 1.25
-        },
-        "206": {
-          "material": "CRIMSON_SLAB",
-          "buy": 1,
-          "sell": 0.62
-        },
-        "207": {
-          "material": "CRIMSON_STAIRS",
-          "buy": 3,
-          "sell": 1.87
-        },
-        "208": {
-          "material": "CRIMSON_STEM",
-          "buy": 8,
-          "sell": 5
-        },
-        "209": {
-          "material": "DARK_OAK_LOG",
-          "buy": 6,
-          "sell": 4
-        },
-        "210": {
-          "material": "DARK_OAK_PLANKS",
-          "buy": 1.5,
-          "sell": 1
-        },
-        "211": {
-          "material": "DARK_OAK_SLAB",
-          "buy": 0.75,
-          "sell": 0.5
-        },
-        "212": {
-          "material": "DARK_OAK_STAIRS",
-          "buy": 2.25,
-          "sell": 1.5
-        },
-        "213": {
-          "material": "DARK_OAK_WOOD",
-          "buy": 8,
-          "sell": 5.33
-        },
-        "214": {
-          "material": "JUNGLE_LOG",
-          "buy": 6,
-          "sell": 2.5
-        },
-        "215": {
-          "material": "JUNGLE_PLANKS",
-          "buy": 1.5,
-          "sell": 0.62
-        },
-        "216": {
-          "material": "JUNGLE_SLAB",
-          "buy": 0.75,
-          "sell": 0.31
-        },
-        "217": {
-          "material": "JUNGLE_STAIRS",
-          "buy": 2.25,
-          "sell": 0.93
-        },
-        "218": {
-          "material": "JUNGLE_WOOD",
-          "buy": 8,
-          "sell": 5.33
-        },
-        "223": {
-          "material": "MANGROVE_LOG",
-          "buy": 6,
-          "sell": 4
-        },
-        "224": {
-          "material": "MANGROVE_PLANKS",
-          "buy": 1.5,
-          "sell": 1
-        },
-        "226": {
-          "material": "MANGROVE_SLAB",
-          "buy": 0.75,
-          "sell": 0.5
-        },
-        "227": {
-          "material": "MANGROVE_STAIRS",
-          "buy": 2.25,
-          "sell": 1.5
-        },
-        "229": {
-          "material": "MANGROVE_WOOD",
-          "buy": 8,
-          "sell": 5.33
-        },
-        "230": {
-          "material": "OAK_LOG",
-          "buy": 4,
-          "sell": 1
-        },
-        "231": {
-          "material": "OAK_PLANKS",
-          "buy": 1,
-          "sell": 0.62
-        },
-        "232": {
-          "material": "OAK_SLAB",
-          "buy": 0.5,
-          "sell": 0.15
-        },
-        "233": {
-          "material": "OAK_STAIRS",
-          "buy": 1.5,
-          "sell": 0.93
-        },
-        "234": {
-          "material": "OAK_WOOD",
-          "buy": 5.33,
-          "sell": 3.33
-        },
-        "235": {
-          "material": "SPRUCE_LOG",
-          "buy": 6,
-          "sell": 4
-        },
-        "236": {
-          "material": "SPRUCE_PLANKS",
-          "buy": 1.5,
-          "sell": 1
-        },
-        "237": {
-          "material": "SPRUCE_SLAB",
-          "buy": 0.75,
-          "sell": 0.5
-        },
-        "238": {
-          "material": "SPRUCE_STAIRS",
-          "buy": 2.25,
-          "sell": 1.5
-        },
-        "239": {
-          "material": "SPRUCE_WOOD",
-          "buy": 8,
-          "sell": 5.33
-        },
-        "43": {
-          "material": "CHERRY_LOG",
-          "buy": 4,
-          "sell": 1
-        },
-        "44": {
-          "material": "CHERRY_PLANKS",
-          "buy": 1,
-          "sell": 0.62
-        },
-        "45": {
-          "material": "CHERRY_SLAB",
-          "buy": 1.5,
-          "sell": 0.31
-        }
-      }
-    },
-    "page6": {
-      "items": {
-        "46": {
-          "material": "CHERRY_STAIRS",
-          "buy": 1.5,
-          "sell": 0.93
-        },
-        "47": {
-          "material": "CHERRY_WOOD",
-          "buy": 5.33,
-          "sell": 3.33
-        },
-        "242": {
-          "material": "WARPED_HYPHAE",
-          "buy": 8,
-          "sell": 5
-        },
-        "243": {
-          "material": "WARPED_PLANKS",
-          "buy": 2,
-          "sell": 1.25
-        },
-        "244": {
-          "material": "WARPED_SLAB",
-          "buy": 1,
-          "sell": 0.62
-        },
-        "245": {
-          "material": "WARPED_STAIRS",
-          "buy": 3,
-          "sell": 1.87
-        },
-        "246": {
-          "material": "WARPED_STEM",
-          "buy": 8,
-          "sell": 5
-        },
-        "247": {
-          "material": "BLACK_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "248": {
-          "material": "BLUE_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "249": {
-          "material": "BROWN_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "250": {
-          "material": "CYAN_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "251": {
-          "material": "GRAY_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "252": {
-          "material": "GREEN_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "253": {
-          "material": "LIGHT_BLUE_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "254": {
-          "material": "LIGHT_GRAY_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "255": {
-          "material": "LIME_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "256": {
-          "material": "MAGENTA_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "257": {
-          "material": "ORANGE_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "258": {
-          "material": "PINK_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "259": {
-          "material": "PURPLE_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "260": {
-          "material": "RED_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "261": {
-          "material": "WHITE_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        },
-        "262": {
-          "material": "YELLOW_WOOL",
-          "buy": 29.4,
-          "sell": 7.35
-        }
-      }
-    }
-  }
-};
+document.addEventListener('DOMContentLoaded', () => {
+    let shopData = {}; // Will store combined data from YAML files
+    let cart = {}; // Stores items added to the cart with their quantities
 
-let cart = {}; // Stores items added to the cart with their quantities
+    // Get DOM elements
+    const searchInput = document.getElementById('searchInput');
+    const itemListTableBody = document.getElementById('itemList');
+    const subtotalSpan = document.getElementById('subtotal');
+    const gstInput = document.getElementById('gstInput');
+    const gstAmountSpan = document.getElementById('gstAmount');
+    const taxInput = document.getElementById('taxInput');
+    const taxAmountSpan = document.getElementById('taxAmount');
+    const totalAmountSpan = document.getElementById('totalAmount');
+    const previewBtn = document.getElementById('previewBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const invoicePreview = document.getElementById('invoicePreview');
+    const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
 
-// Get DOM elements
-const searchInput = document.getElementById('searchInput');
-const itemListTableBody = document.getElementById('itemList');
-const subtotalSpan = document.getElementById('subtotal');
-const gstInput = document.getElementById('gstInput');
-const gstAmountSpan = document.getElementById('gstAmount');
-const taxInput = document.getElementById('taxInput');
-const taxAmountSpan = document.getElementById('taxAmount');
-const totalAmountSpan = document.getElementById('totalAmount');
-const previewBtn = document.getElementById('previewBtn');
-const downloadBtn = document.getElementById('downloadBtn');
-const invoicePreview = document.getElementById('invoicePreview');
-const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+    // List of YAML files to fetch
+    // IMPORTANT: Ensure these files are in the same directory as index.html on your web server/GitHub Pages
+    const fileList = ['Blocks.yml.old.yml']; // Add other YAML files here, e.g., 'Ores.yml'
 
-// Function to flatten shop data into a single array of items
-function getAllItems() {
-    let allItems = [];
-    for (const pageKey in shopData.pages) {
-        const page = shopData.pages[pageKey];
-        for (const itemKey in page.items) {
-            allItems.push(page.items[itemKey]);
+    // Function to fetch and parse YAML files
+    async function fetchAndParseYamlFiles() {
+        try {
+            const fetchPromises = fileList.map(async file => {
+                const response = await fetch(file);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status} for file: ${file}`);
+                }
+                const text = await response.text();
+                // Use js-yaml to parse the YAML content
+                const data = jsyaml.load(text);
+                return data;
+            });
+
+            const results = await Promise.all(fetchPromises);
+            
+            // Combine data from all YAML files into shopData
+            shopData = {};
+            results.forEach(data => {
+                if (data && data.pages) {
+                    for (const pageKey in data.pages) {
+                        if (data.pages.hasOwnProperty(pageKey)) {
+                            if (!shopData.pages) {
+                                shopData.pages = {};
+                            }
+                            shopData.pages[pageKey] = data.pages[pageKey];
+                        }
+                    }
+                }
+            });
+            console.log('Combined Shop Data:', shopData);
+            displayItems(); // Initial display after data is loaded
+        } catch (error) {
+            console.error('Error fetching or parsing YAML files:', error);
+            itemListTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading items. Please ensure YAML files are correctly placed and formatted.</td></tr>';
         }
     }
-    return allItems;
-}
 
-// Function to display items in the table
-function displayItems(filter = '') {
-    itemListTableBody.innerHTML = '';
-    const allItems = getAllItems();
-
-    const filteredItems = allItems.filter(item => 
-        item.material.toLowerCase().includes(filter.toLowerCase())
-    );
-
-    filteredItems.forEach(item => {
-        const row = itemListTableBody.insertRow();
-        row.dataset.material = item.material; // Store material name for easy access
-
-        const materialCell = row.insertCell();
-        materialCell.textContent = item.material;
-
-        const quantityCell = row.insertCell();
-        const quantityInput = document.createElement('input');
-        quantityInput.type = 'number';
-        quantityInput.min = '0';
-        quantityInput.value = cart[item.material] ? cart[item.material].quantity : 0;
-        quantityInput.classList.add('form-control', 'form-control-sm');
-        quantityInput.addEventListener('input', (event) => {
-            const newQuantity = parseInt(event.target.value);
-            if (newQuantity > 0) {
-                cart[item.material] = { ...item, quantity: newQuantity };
-            } else {
-                delete cart[item.material];
+    // Function to flatten shop data into a single array of items
+    function getAllItems() {
+        let allItems = [];
+        if (shopData && shopData.pages) {
+            for (const pageKey in shopData.pages) {
+                const page = shopData.pages[pageKey];
+                for (const itemKey in page.items) {
+                    allItems.push(page.items[itemKey]);
+                }
             }
-            updateBill();
-            updateItemCost(row, item.material);
-        });
-        quantityCell.appendChild(quantityInput);
-
-        const costCell = row.insertCell();
-        costCell.textContent = (item.buy * (cart[item.material] ? cart[item.material].quantity : 0)).toFixed(2);
-        costCell.classList.add('item-cost');
-
-        const actionCell = row.insertCell();
-        const addButton = document.createElement('button');
-        addButton.classList.add('btn', 'btn-primary', 'btn-sm');
-        addButton.textContent = 'Add';
-        addButton.addEventListener('click', () => {
-            quantityInput.value = parseInt(quantityInput.value) + 1;
-            quantityInput.dispatchEvent(new Event('input')); // Trigger input event to update cart and bill
-        });
-        actionCell.appendChild(addButton);
-    });
-}
-
-// Function to update individual item cost in the table
-function updateItemCost(row, material) {
-    const costCell = row.querySelector('.item-cost');
-    const item = getAllItems().find(i => i.material === material);
-    if (item && cart[material]) {
-        costCell.textContent = (item.buy * cart[material].quantity).toFixed(2);
-    } else {
-        costCell.textContent = '0.00';
+        }
+        return allItems;
     }
-}
 
-// Function to update bill calculations
-function updateBill() {
-    let subtotal = 0;
-    for (const material in cart) {
-        subtotal += cart[material].buy * cart[material].quantity;
+    // Function to display items in the table
+    function displayItems(filter = '') {
+        itemListTableBody.innerHTML = '';
+        const allItems = getAllItems();
+
+        const filteredItems = allItems.filter(item => 
+            item.material.toLowerCase().includes(filter.toLowerCase())
+        );
+
+        filteredItems.forEach(item => {
+            const row = itemListTableBody.insertRow();
+            row.dataset.material = item.material; // Store material name for easy access
+
+            const materialCell = row.insertCell();
+            materialCell.textContent = item.material;
+
+            const quantityCell = row.insertCell();
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.min = '0';
+            quantityInput.value = cart[item.material] ? cart[item.material].quantity : 0;
+            quantityInput.classList.add('form-control', 'form-control-sm');
+            quantityInput.addEventListener('input', (event) => {
+                const newQuantity = parseInt(event.target.value);
+                if (newQuantity > 0) {
+                    cart[item.material] = { ...item, quantity: newQuantity };
+                } else {
+                    delete cart[item.material];
+                }
+                updateBill();
+                updateItemCost(row, item.material);
+            });
+            quantityCell.appendChild(quantityInput);
+
+            const costCell = row.insertCell();
+            costCell.textContent = (item.buy * (cart[item.material] ? cart[item.material].quantity : 0)).toFixed(2);
+            costCell.classList.add('item-cost');
+
+            const actionCell = row.insertCell();
+            const addButton = document.createElement('button');
+            addButton.classList.add('btn', 'btn-primary', 'btn-sm');
+            addButton.textContent = 'Add';
+            addButton.addEventListener('click', () => {
+                quantityInput.value = parseInt(quantityInput.value) + 1;
+                quantityInput.dispatchEvent(new Event('input')); // Trigger input event to update cart and bill
+            });
+            actionCell.appendChild(addButton);
+        });
     }
-    subtotalSpan.textContent = subtotal.toFixed(2);
 
-    const gstRate = parseFloat(gstInput.value) || 0;
-    const gstAmount = subtotal * (gstRate / 100);
-    gstAmountSpan.textContent = gstAmount.toFixed(2);
+    // Function to update individual item cost in the table
+    function updateItemCost(row, material) {
+        const costCell = row.querySelector('.item-cost');
+        const item = getAllItems().find(i => i.material === material);
+        if (item && cart[material]) {
+            costCell.textContent = (item.buy * cart[material].quantity).toFixed(2);
+        } else {
+            costCell.textContent = '0.00';
+        }
+    }
 
-    const taxRate = parseFloat(taxInput.value) || 0;
-    const taxAmount = subtotal * (taxRate / 100);
-    taxAmountSpan.textContent = taxAmount.toFixed(2);
+    // Function to update bill calculations
+    function updateBill() {
+        let subtotal = 0;
+        for (const material in cart) {
+            subtotal += cart[material].buy * cart[material].quantity;
+        }
+        subtotalSpan.textContent = subtotal.toFixed(2);
 
-    const totalAmount = subtotal + gstAmount + taxAmount;
-    totalAmountSpan.textContent = totalAmount.toFixed(2);
-}
+        const gstRate = parseFloat(gstInput.value) || 0;
+        const gstAmount = subtotal * (gstRate / 100);
+        gstAmountSpan.textContent = gstAmount.toFixed(2);
 
-// Function to generate invoice preview
-function previewInvoice() {
-    let invoiceContent = `
-        <h3>Invoice</h3>
-        <p>Date: ${new Date().toLocaleDateString()}</p>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Material</th>
-                    <th>Quantity</th>
-                    <th>Price (Buy)</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
+        const taxRate = parseFloat(taxInput.value) || 0;
+        const taxAmount = subtotal * (taxRate / 100);
+        taxAmountSpan.textContent = taxAmount.toFixed(2);
 
-    for (const material in cart) {
-        const item = cart[material];
-        const itemTotal = item.buy * item.quantity;
-        invoiceContent += `
-            <tr>
-                <td>${item.material}</td>
-                <td>${item.quantity}</td>
-                <td>${item.buy.toFixed(2)}</td>
-                <td>${itemTotal.toFixed(2)}</td>
-            </tr>
+        const totalAmount = subtotal + gstAmount + taxAmount;
+        totalAmountSpan.textContent = totalAmount.toFixed(2);
+    }
+
+    // Function to generate invoice preview
+    function previewInvoice() {
+        let invoiceContent = `
+            <h3>Invoice</h3>
+            <p>Date: ${new Date().toLocaleDateString()}</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Material</th>
+                        <th>Quantity</th>
+                        <th>Price (Buy)</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
         `;
+
+        for (const material in cart) {
+            const item = cart[material];
+            const itemTotal = item.buy * item.quantity;
+            invoiceContent += `
+                <tr>
+                    <td>${item.material}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.buy.toFixed(2)}</td>
+                    <td>${itemTotal.toFixed(2)}</td>
+                </tr>
+            `;
+        }
+
+        invoiceContent += `
+                </tbody>
+            </table>
+            <p class="text-end">Subtotal: ${subtotalSpan.textContent}</p>
+            <p class="text-end">GST (${gstInput.value}%): ${gstAmountSpan.textContent}</p>
+            <p class="text-end">Tax (${taxInput.value}%): ${taxAmountSpan.textContent}</p>
+            <h4 class="text-end">Total: ${totalAmountSpan.textContent}</h4>
+        `;
+
+        invoicePreview.innerHTML = invoiceContent;
+        previewModal.show();
     }
 
-    invoiceContent += `
-            </tbody>
-        </table>
-        <p class="text-end">Subtotal: ${subtotalSpan.textContent}</p>
-        <p class="text-end">GST (${gstInput.value}%): ${gstAmountSpan.textContent}</p>
-        <p class="text-end">Tax (${taxInput.value}%): ${taxAmountSpan.textContent}</p>
-        <h4 class="text-end">Total: ${totalAmountSpan.textContent}</h4>
-    `;
-
-    invoicePreview.innerHTML = invoiceContent;
-    previewModal.show();
-}
-
-// Event Listeners
-searchInput.addEventListener('input', (event) => {
-    displayItems(event.target.value);
-});
-
-gstInput.addEventListener('input', updateBill);
-taxInput.addEventListener('input', updateBill);
-
-previewBtn.addEventListener('click', previewInvoice);
-
-downloadBtn.addEventListener('click', () => {
-    html2canvas(document.getElementById('billSummary')).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'bill_summary.png';
-        link.href = canvas.toDataURL();
-        link.click();
+    // Event Listeners
+    searchInput.addEventListener('input', (event) => {
+        displayItems(event.target.value);
     });
-});
 
-// Initial display
-displayItems();
-updateBill();
+    gstInput.addEventListener('input', updateBill);
+    taxInput.addEventListener('input', updateBill);
+
+    previewBtn.addEventListener('click', previewInvoice);
+
+    downloadBtn.addEventListener('click', () => {
+        html2canvas(document.getElementById('billSummary')).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'bill_summary.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    });
+
+    // Initial data fetch and display
+    fetchAndParseYamlFiles();
+});
