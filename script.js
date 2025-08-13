@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const invoicePreview = document.getElementById('invoicePreview');
     const previewModal = document.getElementById('previewModal');
     const closeModalButton = previewModal.querySelector('.close-button');
-    const cartSummaryList = document.getElementById('cart-summary-list'); // NEW: Reference to the selected items tbody
+    const cartSummaryList = document.getElementById('cart-summary-list'); // Reference to the selected items tbody
 
-    // List of YAML files to fetch - UPDATED to include all mentioned files
+    // List of YAML files to fetch - Comprehensive list
     const fileList = [
         'Blocks.yml.old.yml',
         'Ores.yml',
@@ -45,19 +45,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const fetchPromises = fileList.map(async file => {
                 const response = await fetch(file);
                 if (!response.ok) {
-                    // Log a warning instead of throwing an error for missing files
                     console.warn(`Warning: Could not fetch ${file}. Status: ${response.status}`);
-                    return null; // Return null for files that couldn't be fetched
+                    return null;
                 }
                 const text = await response.text();
-                // Use js-yaml to parse the YAML content
                 const data = jsyaml.load(text);
                 return data;
             });
 
             const results = await Promise.all(fetchPromises);
             
-            // Combine data from all YAML files into allItems array
             allItems = [];
             results.forEach(data => {
                 if (data && data.pages) {
@@ -68,11 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 for (const itemKey in page.items) {
                                     if (page.items.hasOwnProperty(itemKey)) {
                                         const item = page.items[itemKey];
-                                        // Ensure buy/sell prices exist, default to 0 if not
                                         allItems.push({
                                             name: item.material,
-                                            buy_price: item.buy || 0, // Default to 0 if undefined
-                                            sell_price: item.sell || 0 // Default to 0 if undefined
+                                            buy_price: item.buy || 0,
+                                            sell_price: item.sell || 0
                                         });
                                     }
                                 }
@@ -82,17 +78,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             console.log('Combined All Items:', allItems);
-            // After loading all items, sort them alphabetically by name
             allItems.sort((a, b) => a.name.localeCompare(b.name));
-            displayItems(allItems); // Initial display after data is loaded
-            updateSelectedItemsDisplay(); // Initial display of selected items
+            displayItems(allItems);
+            updateSelectedItemsDisplay();
         } catch (error) {
             console.error('Error fetching or parsing YAML files:', error);
             itemListTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading items. Please ensure YAML files are correctly placed and formatted.</td></tr>';
         }
     }
 
-    // Function to display items in the table
+    // Function to display items in the search table
     function displayItems(itemsToDisplay) {
         itemListTableBody.innerHTML = '';
         if (itemsToDisplay.length === 0) {
@@ -102,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         itemsToDisplay.forEach(item => {
             const row = itemListTableBody.insertRow();
-            row.dataset.itemName = item.name; // Store item name for easy access
+            row.dataset.itemName = item.name;
 
             const materialCell = row.insertCell();
             materialCell.textContent = item.name;
@@ -122,13 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 updateBill();
                 updateItemCost(row, item.name);
-                updateSelectedItemsDisplay(); // Update the selected items section
+                updateSelectedItemsDisplay();
             });
             quantityCell.appendChild(quantityInput);
 
             const costCell = row.insertCell();
             costCell.classList.add('item-cost');
-            costCell.textContent = '0.00'; // Initial cost
+            costCell.textContent = '0.00';
 
             const actionCell = row.insertCell();
             const addButton = document.createElement('button');
@@ -136,11 +131,11 @@ document.addEventListener('DOMContentLoaded', () => {
             addButton.textContent = 'Add';
             addButton.addEventListener('click', () => {
                 quantityInput.value = parseInt(quantityInput.value) + 1;
-                quantityInput.dispatchEvent(new Event('input')); // Trigger input event to update cart and bill
+                quantityInput.dispatchEvent(new Event('input'));
             });
             actionCell.appendChild(addButton);
 
-            updateItemCost(row, item.name); // Update cost for initial display
+            updateItemCost(row, item.name);
         });
     }
 
@@ -150,8 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const item = allItems.find(i => i.name === itemName);
         if (!item) return;
 
-        const isBuying = buySellToggle.checked; // true for Buy, false for Sell
-        const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0); // Default to 0 if undefined
+        const isBuying = buySellToggle.checked;
+        const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
 
         if (cart[itemName]) {
             costCell.textContent = (price * cart[itemName].quantity).toFixed(2);
@@ -160,9 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // NEW: Function to update the display of selected items above subtotal
+    // Function to update the display of selected items in the "Selected Items" box
     function updateSelectedItemsDisplay() {
-        cartSummaryList.innerHTML = ''; // Clear current display
+        cartSummaryList.innerHTML = '';
 
         if (Object.keys(cart).length === 0) {
             cartSummaryList.innerHTML = '<tr><td colspan="3" class="text-center">No items added yet.</td></tr>';
@@ -173,7 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const itemName in cart) {
             const item = cart[itemName];
-            // Ensure price is a number, default to 0 if undefined
             const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
             const itemCost = price * item.quantity;
 
@@ -193,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const itemName in cart) {
             const item = cart[itemName];
-            const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0); // Default to 0 if undefined
+            const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
             subtotal += price * item.quantity;
         }
         subtotalSpan.textContent = subtotal.toFixed(2);
@@ -210,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         totalAmountSpan.textContent = totalAmount.toFixed(2);
     }
 
-    // Function to generate invoice preview (now including dynamic cart items)
+    // Function to generate invoice preview
     function previewInvoice() {
         let previewContent = `
             <h1 style="color: #4CAF50; text-align: center; margin-bottom: 20px;">${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice</h1>
@@ -285,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${previewContent}
             </div>
         `;
-        previewModal.style.display = 'flex'; // Show the modal
+        previewModal.style.display = 'flex';
     }
 
     // Event Listeners
@@ -300,7 +294,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buySellToggle.addEventListener('change', () => {
         invoiceTitleDisplay.textContent = buySellToggle.checked ? 'Buying Invoice' : 'Selling Invoice';
-        // Re-calculate all item costs and total bill based on new toggle state
         allItems.forEach(item => {
             const row = itemListTableBody.querySelector(`tr[data-item-name="${item.name}"]`);
             if (row) {
@@ -308,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         updateBill();
-        updateSelectedItemsDisplay(); // Update the selected items section
+        updateSelectedItemsDisplay();
     });
 
     previewButton.addEventListener('click', previewInvoice);
@@ -320,7 +313,6 @@ document.addEventListener('DOMContentLoaded', () => {
         tempDiv.style.top = '-9999px';
         document.body.appendChild(tempDiv);
 
-        // Generate the same content as previewInvoice, but with download-specific styles
         let downloadContent = `
             <div class="download-invoice-container">
                 <h1 style="text-align: center;">${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice</h1>
@@ -394,19 +386,18 @@ document.addEventListener('DOMContentLoaded', () => {
         tempDiv.innerHTML = downloadContent;
 
         html2canvas(tempDiv, {
-            scale: 2, // Higher scale for better image quality
-            backgroundColor: '#ffffff' // Explicitly set white background for the image
+            scale: 2,
+            backgroundColor: '#ffffff'
         }).then(canvas => {
             const link = document.createElement('a');
             link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
         }).finally(() => {
-            document.body.removeChild(tempDiv); // Clean up the temporary div
+            document.body.removeChild(tempDiv);
         });
     });
 
-    // Close modal event listener
     closeModalButton.addEventListener('click', () => {
         previewModal.style.display = 'none';
     });
@@ -417,6 +408,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initial data fetch and display
     fetchAndParseYamlFiles();
 });

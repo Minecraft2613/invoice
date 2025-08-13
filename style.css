@@ -114,9 +114,15 @@ input:checked + .slider:before {
 table {
     width: 100%;
     border-collapse: collapse;
-    /* Add this property to ensure fixed column widths */
-    table-layout: fixed; /* */
+    table-layout: fixed; /* Crucial: Ensures columns respect defined widths */
 }
+
+/* Apply specific widths to headers */
+thead th:nth-child(1) { width: auto; /* Material Name will take remaining space */ }
+thead th:nth-child(2) { width: 120px; /* Quantity column */ }
+thead th:nth-child(3) { width: 120px; /* Cost column */ }
+thead th:nth-child(4) { width: 100px; /* Action column */ }
+
 
 th, td {
     padding: 15px;
@@ -142,16 +148,21 @@ tbody#item-list {
 }
 
 tbody#item-list tr {
-    /* REMOVE these conflicting properties: */
-    /* display: table; */
-    /* width: 100%; */
-    /* table-layout: fixed; (This should be on the main 'table' element) */
-    /* By removing these, the rows will inherit table-row behavior within the block tbody,
-       and the column widths will be dictated by the parent table's table-layout: fixed. */
+    /* Ensure the table rows are displayed as table rows within the block tbody */
+    display: table; /* This makes the tr behave like a table */
+    width: 100%; /* And stretch to full width */
+    table-layout: fixed; /* Apply fixed layout to inner rows too for consistent cell sizing */
 }
 
+/* Apply specific widths to cells within the tbody rows to match headers */
+tbody#item-list td:nth-child(1) { width: auto; } /* Material Name */
+tbody#item-list td:nth-child(2) { width: 120px; } /* Quantity */
+tbody#item-list td:nth-child(3) { width: 120px; } /* Cost */
+tbody#item-list td:nth-child(4) { width: 100px; } /* Action */
+
+
 td input[type="number"] {
-    width: 80px;
+    width: 80px; /* This width is for the input field itself, not the cell */
     padding: 8px;
     background-color: #444;
     border: 1px solid #555;
