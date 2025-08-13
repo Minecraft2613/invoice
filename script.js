@@ -13,29 +13,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allItems = [];
     
-    // List of YAML files to load
+    // --- FIX: Correct file paths based on your GitHub repository structure ---
+    // If your files are in the SAME folder as index.html, use this:
     const fileList = ['Blocks.yml.old.yml', 'Ores.yml'];
+
+    // If your files are in a SUBDIRECTORY (e.g., 'invoice'), use this instead:
+    // const fileList = ['invoice/Blocks.yml', 'invoice/Ores.yml'];
 
     async function fetchItems() {
         try {
-            const fetchPromises = fileList.map(async file => {
-                const response = await fetch(file);
-                const text = await response.text();
+            const fetchPromises = fileList.map(file => fetch(file));
+            const responses = await Promise.all(fetchPromises);
+
+            for (const response of responses) {
+                if (!response.ok) {
+                    throw new Error(`Failed to load: ${response.url} with status ${response.status}`);
+                }
+            }
+
+            const texts = await Promise.all(responses.map(res => res.text()));
+            const allItemsData = texts.map(text => {
                 const data = jsyaml.load(text);
                 return Object.values(data)[0];
             });
-            
-            const results = await Promise.all(fetchPromises);
-            allItems = results.flat();
+
+            allItems = allItemsData.flat();
             displayItems(allItems);
+
         } catch (error) {
             console.error('Error fetching or parsing YAML files:', error);
-            itemListBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Error loading items.</td></tr>';
+            itemListBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Error loading items. Check file paths and format.</td></tr>';
         }
     }
 
     function displayItems(items) {
         itemListBody.innerHTML = '';
+        if (items.length === 0) {
+            itemListBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No items found.</td></tr>';
+            return;
+        }
         items.forEach(item => {
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -61,14 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const input = event.target;
         const itemName = input.dataset.itemName;
         const quantity = parseInt(input.value) || 0;
-
         const item = allItems.find(i => i.name === itemName);
         if (!item) return;
-
         const isBuying = buySellToggle.checked;
         const price = isBuying ? item.buy_price : item.sell_price;
         const cost = price * quantity;
-        
         document.querySelector(`.item-cost[data-item-name="${itemName}"]`).textContent = cost;
         calculateTotals();
     }
@@ -81,11 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const taxRate = parseFloat(taxInput.value) || 0;
         const gstRate = parseFloat(gstInput.value) || 0;
-        
         const totalTax = subtotal * (taxRate / 100);
         const totalGst = subtotal * (gstRate / 100);
         const finalTotal = subtotal + totalTax + totalGst;
-
         totalTaxSpan.textContent = totalTax.toFixed(2);
         totalGstSpan.textContent = totalGst.toFixed(2);
         finalTotalSpan.textContent = finalTotal.toFixed(2);
@@ -104,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Corrected download function to fix the TypeError ---
     downloadButton.addEventListener('click', () => {
         const selectedItems = [];
         document.querySelectorAll('.quantity-input').forEach(input => {
@@ -167,6 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         downloadArea.innerHTML = '';
     });
-
+    
     fetchItems();
 });
