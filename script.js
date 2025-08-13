@@ -13,18 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allItems = [];
     
-    // --- FIX: Correct file paths based on your GitHub repository structure ---
-    // If your files are in the SAME folder as index.html, use this:
-    const fileList = ['Blocks.yml.old.yml', 'Ores.yml'];
-
-    // If your files are in a SUBDIRECTORY (e.g., 'invoice'), use this instead:
-    // const fileList = ['invoice/Blocks.yml', 'invoice/Ores.yml'];
+    // --- FIX: The file paths have been corrected to be relative to the current directory. ---
+    // This assumes your YAML files are in the same folder as index.html.
+    const fileList = ['Blocks.yml', 'Ores.yml'];
 
     async function fetchItems() {
         try {
             const fetchPromises = fileList.map(file => fetch(file));
             const responses = await Promise.all(fetchPromises);
 
+            // Check if any fetch requests failed with a 404 or other status code.
             for (const response of responses) {
                 if (!response.ok) {
                     throw new Error(`Failed to load: ${response.url} with status ${response.status}`);
@@ -42,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Error fetching or parsing YAML files:', error);
-            itemListBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Error loading items. Check file paths and format.</td></tr>';
+            // Display a user-friendly error message on the page.
+            itemListBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Error loading items. Please check if your YAML files exist at the correct path.</td></tr>`;
         }
     }
 
