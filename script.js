@@ -5,16 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get DOM elements
     const invoiceTitleDisplay = document.getElementById('invoice-title');
     const buySellToggle = document.getElementById('buySellToggle');
-    const searchInput = document.getElementById('item-search');
-    const itemListTableBody = document.getElementById('item-list');
+    const searchInput = document.getElementById('item-search'); // Corrected ID
+    const itemListTableBody = document.getElementById('item-list'); // Corrected ID
     const subtotalSpan = document.getElementById('subtotal');
     const gstInput = document.getElementById('gstInput');
     const gstAmountSpan = document.getElementById('gstAmount');
     const taxInput = document.getElementById('taxInput');
     const taxAmountSpan = document.getElementById('taxAmount');
     const totalAmountSpan = document.getElementById('totalAmount');
-    const previewButton = document.getElementById('preview-button');
-    const downloadButton = document.getElementById('download-button');
+    const previewButton = document.getElementById('preview-button'); // Corrected ID
+    const downloadButton = document.getElementById('download-button'); // Corrected ID
     const invoicePreview = document.getElementById('invoicePreview');
     const previewModal = document.getElementById('previewModal');
     const closeModalButton = previewModal.querySelector('.close-button');
@@ -31,10 +31,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(`HTTP error! status: ${response.status} for file: ${file}`);
                 }
                 const text = await response.text();
+                // Use js-yaml to parse the YAML content
                 const data = jsyaml.load(text);
-                // Assuming the YAML structure is {pages: {page1: {items: {...}}}}
-                // We need to flatten it to an array of items with buy_price and sell_price
-                let items = [];
+                return data;
+            });
+
+            const results = await Promise.all(fetchPromises);
+            
+            // Combine data from all YAML files into allItems array
+            allItems = [];
+            results.forEach(data => {
                 if (data && data.pages) {
                     for (const pageKey in data.pages) {
                         if (data.pages.hasOwnProperty(pageKey)) {
@@ -43,8 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 for (const itemKey in page.items) {
                                     if (page.items.hasOwnProperty(itemKey)) {
                                         const item = page.items[itemKey];
-                                        items.push({
-                                            name: item.material, // Use material as name
+                                        allItems.push({
+                                            name: item.material,
                                             buy_price: item.buy,
                                             sell_price: item.sell
                                         });
@@ -54,11 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 }
-                return items;
             });
-
-            const results = await Promise.all(fetchPromises);
-            allItems = results.flat(); // Flatten array of arrays into a single array
             console.log('Combined All Items:', allItems);
             displayItems(allItems); // Initial display after data is loaded
         } catch (error) {
@@ -70,6 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to display items in the table
     function displayItems(itemsToDisplay) {
         itemListTableBody.innerHTML = '';
+        if (itemsToDisplay.length === 0) {
+            itemListTableBody.innerHTML = '<tr><td colspan="4" class="text-center">No items found or matching your search.</td></tr>';
+            return;
+        }
+
         itemsToDisplay.forEach(item => {
             const row = itemListTableBody.insertRow();
             row.dataset.itemName = item.name; // Store item name for easy access
