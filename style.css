@@ -114,7 +114,7 @@ input:checked + .slider:before {
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Ensures columns maintain their width */
+    table-layout: fixed; /* Crucial: Ensures columns respect defined widths */
 }
 
 th, td {
@@ -135,14 +135,15 @@ tr:hover {
 }
 
 tbody#item-list {
-    display: block; /* Keep display block for overflow-y */
-    max-height: 400px; /* Increased height for more items */
+    display: block; /* Keep display block for overflow-y to enable scrolling */
+    max-height: 300px; /* Adjust height as needed */
     overflow-y: auto;
 }
 
 tbody#item-list tr {
-    /* Removed display: table; and width: 100%; */
-    /* This allows natural table row behavior within the block tbody */
+    /* REMOVED: display: table; and width: 100%; */
+    /* By default, table rows behave as 'display: table-row', which works correctly
+       when the parent tbody is 'display: block' and the table itself has 'table-layout: fixed'. */
 }
 
 td input[type="number"] {
