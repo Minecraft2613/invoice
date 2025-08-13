@@ -5,16 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get DOM elements
     const invoiceTitleDisplay = document.getElementById('invoice-title');
     const buySellToggle = document.getElementById('buySellToggle');
-    const searchInput = document.getElementById('item-search'); // Corrected ID
-    const itemListTableBody = document.getElementById('item-list'); // Corrected ID
+    const searchInput = document.getElementById('item-search');
+    const itemListTableBody = document.getElementById('item-list');
     const subtotalSpan = document.getElementById('subtotal');
     const gstInput = document.getElementById('gstInput');
     const gstAmountSpan = document.getElementById('gstAmount');
     const taxInput = document.getElementById('taxInput');
     const taxAmountSpan = document.getElementById('taxAmount');
     const totalAmountSpan = document.getElementById('totalAmount');
-    const previewButton = document.getElementById('preview-button'); // Corrected ID
-    const downloadButton = document.getElementById('download-button'); // Corrected ID
+    const previewButton = document.getElementById('preview-button');
+    const downloadButton = document.getElementById('download-button');
     const invoicePreview = document.getElementById('invoicePreview');
     const previewModal = document.getElementById('previewModal');
     const closeModalButton = previewModal.querySelector('.close-button');
@@ -62,6 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             console.log('Combined All Items:', allItems);
+            // After loading all items, sort them alphabetically by name
+            allItems.sort((a, b) => a.name.localeCompare(b.name));
             displayItems(allItems); // Initial display after data is loaded
         } catch (error) {
             console.error('Error fetching or parsing YAML files:', error);
@@ -160,46 +162,81 @@ document.addEventListener('DOMContentLoaded', () => {
         totalAmountSpan.textContent = totalAmount.toFixed(2);
     }
 
-    // Function to generate invoice preview
+    // Function to generate invoice preview (now including dynamic cart items)
     function previewInvoice() {
-        const originalInvoiceContainer = document.querySelector('.invoice-container');
-        const clone = originalInvoiceContainer.cloneNode(true);
-        
-        // Remove interactive elements from the clone
-        clone.querySelector('.header').remove(); // Remove header with toggle
-        clone.querySelector('.search-section').remove(); // Remove search section
-        clone.querySelector('.invoice-buttons').remove(); // Remove buttons
-        
-        // Replace input fields with their values
-        clone.querySelectorAll('input').forEach(input => {
-            const span = document.createElement('span');
-            span.textContent = input.value;
-            input.replaceWith(span);
-        });
+        let previewContent = `
+            <h1 style="color: #4CAF50; text-align: center; margin-bottom: 20px;">${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Material Name</th>
+                        <th>Quantity</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
 
-        // Style for the preview (can be moved to CSS if preferred)
-        const previewHTML = `
-            <style>
-                .preview-container {
-                    background-color: #2b2b2b;
-                    padding: 30px;
-                    border-radius: 12px;
-                    color: #f0f0f0;
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-                }
-                .preview-container h1 { color: #4CAF50; font-size: 2rem; margin-bottom: 20px; }
-                .preview-container table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-                .preview-container th, .preview-container td { padding: 10px; border-bottom: 1px solid #444; text-align: left; }
-                .preview-container th { background-color: #3b3b3b; color: #999; }
-                .preview-container .summary { background-color: #3b3b3b; padding: 15px; border-radius: 8px; }
-                .preview-container .summary div { display: flex; justify-content: space-between; padding: 5px 0; }
-                .preview-container .summary .total-row { font-size: 1.2rem; font-weight: bold; color: #4CAF50; border-top: 2px solid #4CAF50; padding-top: 10px; margin-top: 10px; }
-            </style>
-            <div class="preview-container">
-                ${clone.innerHTML}
+        let currentSubtotal = 0;
+        const isBuying = buySellToggle.checked;
+
+        for (const itemName in cart) {
+            const item = cart[itemName];
+            const price = isBuying ? item.buy_price : item.sell_price;
+            const itemCost = price * item.quantity;
+            currentSubtotal += itemCost;
+            previewContent += `
+                <tr>
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>${itemCost.toFixed(2)}</td>
+                </tr>
+            `;
+        }
+
+        if (Object.keys(cart).length === 0) {
+            previewContent += `<tr><td colspan="3" class="text-center">No items in cart.</td></tr>`;
+        }
+
+        previewContent += `
+                </tbody>
+            </table>
+            <div class="summary">
+                <div class="tax-row">
+                    <span>Subtotal:</span>
+                    <span>${currentSubtotal.toFixed(2)}</span>
+                </div>
+        `;
+
+        const gstRate = parseFloat(gstInput.value) || 0;
+        const gstAmount = currentSubtotal * (gstRate / 100);
+        
+        const taxRate = parseFloat(taxInput.value) || 0;
+        const taxAmount = currentSubtotal * (taxRate / 100);
+        
+        const totalAmount = currentSubtotal + gstAmount + taxAmount;
+
+        previewContent += `
+                <div class="tax-row">
+                    <span>GST (${gstRate}%):</span>
+                    <span>${gstAmount.toFixed(2)}</span>
+                </div>
+                <div class="tax-row">
+                    <span>Tax (${taxRate}%):</span>
+                    <span>${taxAmount.toFixed(2)}</span>
+                </div>
+                <div class="total-row">
+                    <strong>Total Amount:</strong>
+                    <span>${totalAmount.toFixed(2)}</span>
+                </div>
             </div>
         `;
-        invoicePreview.innerHTML = previewHTML;
+
+        invoicePreview.innerHTML = `
+            <div class="preview-container">
+                ${previewContent}
+            </div>
+        `;
         previewModal.style.display = 'flex'; // Show the modal
     }
 
@@ -228,36 +265,88 @@ document.addEventListener('DOMContentLoaded', () => {
     previewButton.addEventListener('click', previewInvoice);
 
     downloadButton.addEventListener('click', () => {
-        // Create a temporary div to render the invoice for html2canvas
         const tempDiv = document.createElement('div');
         tempDiv.style.position = 'absolute';
         tempDiv.style.left = '-9999px';
         tempDiv.style.top = '-9999px';
-        tempDiv.style.width = '800px'; // Set a fixed width for consistent rendering
-        tempDiv.style.backgroundColor = '#2b2b2b'; // Match invoice-container background
         document.body.appendChild(tempDiv);
 
-        // Clone the invoice-container and modify it for download
-        const originalInvoiceContainer = document.querySelector('.invoice-container');
-        const clone = originalInvoiceContainer.cloneNode(true);
-        
-        // Remove interactive elements from the clone
-        clone.querySelector('.header').remove(); 
-        clone.querySelector('.search-section').remove(); 
-        clone.querySelector('.invoice-buttons').remove(); 
-        
-        // Replace input fields with their values
-        clone.querySelectorAll('input').forEach(input => {
-            const span = document.createElement('span');
-            span.textContent = input.value;
-            input.replaceWith(span);
-        });
+        // Generate the same content as previewInvoice, but with download-specific styles
+        let downloadContent = `
+            <div class="download-invoice-container">
+                <h1 style="text-align: center;">${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Material Name</th>
+                            <th>Quantity</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
 
-        tempDiv.appendChild(clone);
+        let currentSubtotal = 0;
+        const isBuying = buySellToggle.checked;
+
+        for (const itemName in cart) {
+            const item = cart[itemName];
+            const price = isBuying ? item.buy_price : item.sell_price;
+            const itemCost = price * item.quantity;
+            currentSubtotal += itemCost;
+            downloadContent += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>${itemCost.toFixed(2)}</td>
+                    </tr>
+                `;
+        }
+
+        if (Object.keys(cart).length === 0) {
+            downloadContent += `<tr><td colspan="3" style="text-align: center;">No items in cart.</td></tr>`;
+        }
+
+        downloadContent += `
+                    </tbody>
+                </table>
+                <div class="summary">
+                    <div class="tax-row">
+                        <span>Subtotal:</span>
+                        <span>${currentSubtotal.toFixed(2)}</span>
+                    </div>
+            `;
+
+        const gstRate = parseFloat(gstInput.value) || 0;
+        const gstAmount = currentSubtotal * (gstRate / 100);
+        
+        const taxRate = parseFloat(taxInput.value) || 0;
+        const taxAmount = currentSubtotal * (taxRate / 100);
+        
+        const totalAmount = currentSubtotal + gstAmount + taxAmount;
+
+        downloadContent += `
+                    <div class="tax-row">
+                        <span>GST (${gstRate}%):</span>
+                        <span>${gstAmount.toFixed(2)}</span>
+                    </div>
+                    <div class="tax-row">
+                        <span>Tax (${taxRate}%):</span>
+                        <span>${taxAmount.toFixed(2)}</span>
+                    </div>
+                    <div class="total-row">
+                        <strong>Total Amount:</strong>
+                        <span>${totalAmount.toFixed(2)}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        tempDiv.innerHTML = downloadContent;
 
         html2canvas(tempDiv, {
             scale: 2, // Higher scale for better image quality
-            backgroundColor: '#2b2b2b' // Ensure background is captured
+            backgroundColor: '#ffffff' // Explicitly set white background for the image
         }).then(canvas => {
             const link = document.createElement('a');
             link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
