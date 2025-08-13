@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const invoicePreview = document.getElementById('invoicePreview');
     const previewModal = document.getElementById('previewModal');
     const closeModalButton = previewModal.querySelector('.close-button');
-    const cartSummaryList = document.getElementById('cart-summary-list'); // Reference to the selected items tbody
+    const cartSummaryList = document.getElementById('cart-summary-list'); // NEW: Reference to the selected items tbody
 
-    // List of YAML files to fetch - Comprehensive list
+    // List of YAML files to fetch - UPDATED to include all mentioned files
     const fileList = [
         'Blocks.yml.old.yml',
         'Ores.yml',
@@ -45,16 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const fetchPromises = fileList.map(async file => {
                 const response = await fetch(file);
                 if (!response.ok) {
+                    // Log a warning instead of throwing an error for missing files
                     console.warn(`Warning: Could not fetch ${file}. Status: ${response.status}`);
                     return null; // Return null for files that couldn't be fetched
                 }
                 const text = await response.text();
+                // Use js-yaml to parse the YAML content
                 const data = jsyaml.load(text);
                 return data;
             });
 
             const results = await Promise.all(fetchPromises);
             
+            // Combine data from all YAML files into allItems array
             allItems = [];
             results.forEach(data => {
                 if (data && data.pages) {
@@ -68,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                         // Ensure buy/sell prices exist, default to 0 if not
                                         allItems.push({
                                             name: item.material,
-                                            buy_price: item.buy || 0,
-                                            sell_price: item.sell || 0
+                                            buy_price: item.buy || 0, // Default to 0 if undefined
+                                            sell_price: item.sell || 0 // Default to 0 if undefined
                                         });
                                     }
                                 }
@@ -79,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             console.log('Combined All Items:', allItems);
+            // After loading all items, sort them alphabetically by name
             allItems.sort((a, b) => a.name.localeCompare(b.name));
             displayItems(allItems); // Initial display after data is loaded
             updateSelectedItemsDisplay(); // Initial display of selected items
@@ -88,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to display items in the search table
+    // Function to display items in the table
     function displayItems(itemsToDisplay) {
         itemListTableBody.innerHTML = '';
         if (itemsToDisplay.length === 0) {
@@ -98,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         itemsToDisplay.forEach(item => {
             const row = itemListTableBody.insertRow();
-            row.dataset.itemName = item.name;
+            row.dataset.itemName = item.name; // Store item name for easy access
 
             const materialCell = row.insertCell();
             materialCell.textContent = item.name;
@@ -107,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const quantityInput = document.createElement('input');
             quantityInput.type = 'number';
             quantityInput.min = '0';
-            // Set initial quantity from cart if item is already there
             quantityInput.value = cart[item.name] ? cart[item.name].quantity : 0;
             quantityInput.classList.add('quantity-input');
             quantityInput.addEventListener('input', (event) => {
@@ -115,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (newQuantity > 0) {
                     cart[item.name] = { ...item, quantity: newQuantity };
                 } else {
-                    delete cart[item.name]; // Remove item if quantity is 0
+                    delete cart[item.name];
                 }
                 updateBill();
                 updateItemCost(row, item.name);
@@ -133,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addButton.textContent = 'Add';
             addButton.addEventListener('click', () => {
                 quantityInput.value = parseInt(quantityInput.value) + 1;
-                quantityInput.dispatchEvent(new Event('input')); // Trigger input event
+                quantityInput.dispatchEvent(new Event('input')); // Trigger input event to update cart and bill
             });
             actionCell.appendChild(addButton);
 
@@ -147,8 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const item = allItems.find(i => i.name === itemName);
         if (!item) return;
 
-        const isBuying = buySellToggle.checked;
-        const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
+        const isBuying = buySellToggle.checked; // true for Buy, false for Sell
+        const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0); // Default to 0 if undefined
 
         if (cart[itemName]) {
             costCell.textContent = (price * cart[itemName].quantity).toFixed(2);
@@ -157,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to update the display of selected items in the "Selected Items" box
+    // NEW: Function to update the display of selected items above subtotal
     function updateSelectedItemsDisplay() {
         cartSummaryList.innerHTML = ''; // Clear current display
 
@@ -170,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const itemName in cart) {
             const item = cart[itemName];
+            // Ensure price is a number, default to 0 if undefined
             const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
             const itemCost = price * item.quantity;
 
@@ -189,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const itemName in cart) {
             const item = cart[itemName];
-            const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
+            const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0); // Default to 0 if undefined
             subtotal += price * item.quantity;
         }
         subtotalSpan.textContent = subtotal.toFixed(2);
@@ -206,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         totalAmountSpan.textContent = totalAmount.toFixed(2);
     }
 
-    // Function to generate invoice preview
+    // Function to generate invoice preview (now including dynamic cart items)
     function previewInvoice() {
         let previewContent = `
             <h1 style="color: #4CAF50; text-align: center; margin-bottom: 20px;">${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice</h1>
