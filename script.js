@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let allItems = [];
     
     // List of YAML files to load
-    const fileList = ['Blocks.yml', 'Ores.yml'];
+    const fileList = ['Blocks.old.yml.yml', 'Ores.yml'];
 
     async function fetchItems() {
         try {
