@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const invoicePreview = document.getElementById('invoicePreview');
     const previewModal = document.getElementById('previewModal');
     const closeModalButton = previewModal.querySelector('.close-button');
-    const cartSummaryList = document.getElementById('cart-summary-list');
+    const cartSummaryList = document.getElementById('cart-summary-list'); // New: Selected items display tbody
 
     // List of YAML files to fetch - UPDATED!
     const fileList = [
@@ -68,10 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 for (const itemKey in page.items) {
                                     if (page.items.hasOwnProperty(itemKey)) {
                                         const item = page.items[itemKey];
+                                        // Ensure buy/sell prices exist, default to 0 if not
                                         allItems.push({
                                             name: item.material,
-                                            buy_price: item.buy,
-                                            sell_price: item.sell
+                                            buy_price: item.buy || 0,
+                                            sell_price: item.sell || 0
                                         });
                                     }
                                 }
@@ -171,7 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const itemName in cart) {
             const item = cart[itemName];
-            const price = isBuying ? item.buy_price : item.sell_price;
+            // Ensure price is a number, default to 0 if undefined
+            const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
             const itemCost = price * item.quantity;
 
             const row = cartSummaryList.insertRow();
@@ -190,7 +192,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const itemName in cart) {
             const item = cart[itemName];
-            const price = isBuying ? item.buy_price : item.sell_price;
+            // Ensure price is a number, default to 0 if undefined
+            const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
             subtotal += price * item.quantity;
         }
         subtotalSpan.textContent = subtotal.toFixed(2);
@@ -227,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const itemName in cart) {
             const item = cart[itemName];
-            const price = isBuying ? item.buy_price : item.sell_price;
+            const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
             const itemCost = price * item.quantity;
             currentSubtotal += itemCost;
             previewContent += `
@@ -337,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const itemName in cart) {
             const item = cart[itemName];
-            const price = isBuying ? item.buy_price : item.sell_price;
+            const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
             const itemCost = price * item.quantity;
             currentSubtotal += itemCost;
             downloadContent += `
@@ -416,5 +419,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial data fetch and display
     fetchAndParseYamlFiles();
-    updateSelectedItemsDisplay();
+    updateSelectedItemsDisplay(); // Initial call to display selected items (if any from previous session)
 });

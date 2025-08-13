@@ -89,12 +89,10 @@ input:checked + .slider:before {
 .search-section {
     width: 100%;
     margin-top: 10px;
-    display: flex; /* Added to use flexbox for search input */
-    flex-grow: 1; /* Allows search input to expand */
 }
 
 #item-search {
-    width: 100%; /* Ensure search bar expands fully */
+    width: 100%;
     padding: 12px;
     border-radius: 8px;
     border: 1px solid #444;
@@ -116,7 +114,7 @@ input:checked + .slider:before {
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Added: Ensures columns maintain their width */
+    table-layout: fixed; /* Ensures columns maintain their width */
 }
 
 th, td {
@@ -137,15 +135,14 @@ tr:hover {
 }
 
 tbody#item-list {
-    display: block;
+    display: block; /* Keep display block for overflow-y */
     max-height: 400px; /* Increased height for more items */
     overflow-y: auto;
 }
 
 tbody#item-list tr {
     /* Removed display: table; and width: 100%; */
-    /* Let the table-layout: fixed handle the column width */
-    /* display: table-row; is the default and should work better here */
+    /* This allows natural table row behavior within the block tbody */
 }
 
 td input[type="number"] {
