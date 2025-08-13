@@ -21,7 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartSummaryList = document.getElementById('cart-summary-list'); // New: Selected items display tbody
 
     // List of YAML files to fetch
-    const fileList = ['Blocks.yml.old.yml']; // Add other YAML files here, e.g., 'Ores.yml'
+    const fileList = ['Blocks.yml.old.yml','Ores.yml','Decoration.yml','Dyes.yml','Enchanting.yml','Farming.yml',
+                     'Food.yml','Miscellaneous.yml','Mobs.yml','Music.yml','Potions.yml','Redstone.yml','SpawnEggs.yml',
+                     'Spawners.yml','Workstations.yml','Z_EverythingElse.yml']; // Add other YAML files here, e.g., 'Ores.yml'
 
     // Function to fetch and parse YAML files
     async function fetchAndParseYamlFiles() {
