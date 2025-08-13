@@ -89,6 +89,8 @@ input:checked + .slider:before {
 .search-section {
     width: 100%;
     margin-top: 10px;
+    display: flex; /* Added to use flexbox for search input */
+    flex-grow: 1; /* Allows search input to expand */
 }
 
 #item-search {
@@ -114,6 +116,7 @@ input:checked + .slider:before {
 table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed; /* Added: Ensures columns maintain their width */
 }
 
 th, td {
@@ -140,9 +143,9 @@ tbody#item-list {
 }
 
 tbody#item-list tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
+    /* Removed display: table; and width: 100%; */
+    /* Let the table-layout: fixed handle the column width */
+    /* display: table-row; is the default and should work better here */
 }
 
 td input[type="number"] {
@@ -180,6 +183,7 @@ td input[type="number"]::-webkit-outer-spin-button {
 .selected-items-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed; /* Added for selected items table as well */
 }
 
 .selected-items-table th,
@@ -333,6 +337,7 @@ td input[type="number"]::-webkit-outer-spin-button {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+    table-layout: fixed; /* Essential for downloaded image table as well */
 }
 
 .download-invoice-container th,

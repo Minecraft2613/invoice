@@ -18,12 +18,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const invoicePreview = document.getElementById('invoicePreview');
     const previewModal = document.getElementById('previewModal');
     const closeModalButton = previewModal.querySelector('.close-button');
-    const cartSummaryList = document.getElementById('cart-summary-list'); // New: Selected items display tbody
+    const cartSummaryList = document.getElementById('cart-summary-list');
 
-    // List of YAML files to fetch
-    const fileList = ['Blocks.yml.old.yml','Ores.yml','Decoration.yml','Dyes.yml','Enchanting.yml','Farming.yml',
-                     'Food.yml','Miscellaneous.yml','Mobs.yml','Music.yml','Potions.yml','Redstone.yml','SpawnEggs.yml',
-                     'Spawners.yml','Workstations.yml','Z_EverythingElse.yml']; // Add other YAML files here, e.g., 'Ores.yml'
+    // List of YAML files to fetch - UPDATED!
+    const fileList = [
+        'Blocks.yml.old.yml',
+        'Ores.yml',
+        'Decoration.yml',
+        'Dyes.yml',
+        'Enchanting.yml',
+        'Farming.yml',
+        'Food.yml',
+        'Miscellaneous.yml',
+        'Mobs.yml',
+        'Music.yml',
+        'Potions.yml',
+        'Redstone.yml',
+        'SpawnEggs.yml',
+        'Workstations.yml',
+        'Z_EverythingElse.yml'
+    ];
 
     // Function to fetch and parse YAML files
     async function fetchAndParseYamlFiles() {
@@ -31,7 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const fetchPromises = fileList.map(async file => {
                 const response = await fetch(file);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status} for file: ${file}`);
+                    // Log a warning instead of throwing an error for missing files
+                    console.warn(`Warning: Could not fetch ${file}. Status: ${response.status}`);
+                    return null; // Return null for files that couldn't be fetched
                 }
                 const text = await response.text();
                 // Use js-yaml to parse the YAML content
@@ -400,5 +416,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial data fetch and display
     fetchAndParseYamlFiles();
-    updateSelectedItemsDisplay(); // Initial call to display selected items (if any from previous session)
+    updateSelectedItemsDisplay();
 });
