@@ -305,35 +305,93 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     previewButton.addEventListener('click', previewInvoice);
-    
-downloadButton.addEventListener('click', () => {
-    const previewModalContent = document.querySelector('.modal-content');
 
-    if (!previewModalContent) {
-        alert("Please preview the invoice before downloading.");
-        return;
+downloadButton.addEventListener('click', () => {
+    const tempDiv = document.createElement('div');
+    tempDiv.style.position = 'absolute';
+    tempDiv.style.left = '-9999px';
+    tempDiv.style.top = '0';
+    tempDiv.style.width = '1000px'; // Force wide export
+    tempDiv.style.padding = '20px';
+    tempDiv.style.backgroundColor = '#2b2b2b'; // Dark background for invoice
+    tempDiv.style.color = '#f0f0f0';
+    tempDiv.style.fontFamily = 'Arial, sans-serif';
+    tempDiv.style.borderRadius = '10px';
+
+    document.body.appendChild(tempDiv);
+
+    let downloadContent = `
+        <div class="download-invoice-container">
+            <h1 style="color: #4CAF50; text-align: center;">${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice</h1>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                    <tr style="background-color: #3b3b3b; color: #fff;">
+                        <th style="padding: 10px; text-align: left;">Material Name</th>
+                        <th style="padding: 10px; text-align: left;">Quantity</th>
+                        <th style="padding: 10px; text-align: left;">Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+
+    let currentSubtotal = 0;
+    const isBuying = buySellToggle.checked;
+
+    for (const itemName in cart) {
+        const item = cart[itemName];
+        const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
+        const itemCost = price * item.quantity;
+        currentSubtotal += itemCost;
+        downloadContent += `
+            <tr>
+                <td style="padding: 8px;">${item.name}</td>
+                <td style="padding: 8px;">${item.quantity}</td>
+                <td style="padding: 8px;">${itemCost.toFixed(2)}</td>
+            </tr>
+        `;
     }
 
-    html2canvas(previewModalContent, {
-        scale: 3,
-        useCORS: true,
+    if (Object.keys(cart).length === 0) {
+        downloadContent += `<tr><td colspan="3" style="text-align: center; padding: 8px;">No items in cart.</td></tr>`;
+    }
+
+    const gstRate = parseFloat(gstInput.value) || 0;
+    const gstAmount = currentSubtotal * (gstRate / 100);
+
+    const taxRate = parseFloat(taxInput.value) || 0;
+    const taxAmount = currentSubtotal * (taxRate / 100);
+
+    const totalAmount = currentSubtotal + gstAmount + taxAmount;
+
+    downloadContent += `
+                </tbody>
+            </table>
+            <div style="margin-top: 20px;">
+                <div style="padding: 5px 0;">Subtotal: ${currentSubtotal.toFixed(2)}</div>
+                <div style="padding: 5px 0;">GST (${gstRate}%): ${gstAmount.toFixed(2)}</div>
+                <div style="padding: 5px 0;">Tax (${taxRate}%): ${taxAmount.toFixed(2)}</div>
+                <div style="padding: 5px 0; font-size: 1.2em; color: #4CAF50; font-weight: bold;">
+                    Total Amount: ${totalAmount.toFixed(2)}
+                </div>
+            </div>
+        </div>
+    `;
+
+    tempDiv.innerHTML = downloadContent;
+
+    html2canvas(tempDiv, {
+        scale: 3, // High resolution
         backgroundColor: '#2b2b2b'
     }).then(canvas => {
-        canvas.toBlob(blob => {
-            if (!blob) {
-                alert("Image creation failed.");
-                return;
-            }
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
-            link.click();
-            URL.revokeObjectURL(link.href);
-        }, 'image/png');
-    }).catch(err => {
-        console.error("Error generating invoice image:", err);
+        const link = document.createElement('a');
+        link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }).finally(() => {
+        document.body.removeChild(tempDiv);
     });
 });
+
 
     closeModalButton.addEventListener('click', () => {
         previewModal.style.display = 'none';
