@@ -314,10 +314,11 @@ downloadButton.addEventListener('click', () => {
         return;
     }
 
-    // Clone modal to avoid "hidden" issues
+    // Clone the modal so it's visible for capture
     const clone = modalElement.cloneNode(true);
     clone.style.position = 'absolute';
     clone.style.left = '-9999px';
+    clone.style.top = '0';
     clone.style.display = 'block';
     document.body.appendChild(clone);
 
@@ -326,23 +327,24 @@ downloadButton.addEventListener('click', () => {
         backgroundColor: getComputedStyle(modalElement).backgroundColor || '#2b2b2b',
         useCORS: true
     }).then(canvas => {
-        if (!canvas) {
-            throw new Error("Canvas generation failed");
-        }
         canvas.toBlob(blob => {
             if (!blob) {
-                throw new Error("Blob creation failed");
+                alert("Image creation failed. Please try again.");
+                document.body.removeChild(clone);
+                return;
             }
+
             const link = document.createElement('a');
             link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
             link.href = URL.createObjectURL(blob);
             link.click();
             URL.revokeObjectURL(link.href);
+
+            document.body.removeChild(clone);
         }, 'image/png');
-    }).catch(err => {
-        console.error("Error generating invoice image:", err);
-        alert("Failed to generate image. Please try again.");
-    }).finally(() => {
+    }).catch(error => {
+        console.error("Error generating image:", error);
+        alert("Something went wrong while generating the image.");
         document.body.removeChild(clone);
     });
 });
