@@ -305,21 +305,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     previewButton.addEventListener('click', previewInvoice);
-
+    
 downloadButton.addEventListener('click', () => {
-    const modalElement = document.querySelector('.modal'); // Outer modal container
+    const modalElement = document.querySelector('.modal');
 
     if (!modalElement) {
         alert("Please preview the invoice before downloading.");
         return;
     }
 
-    html2canvas(modalElement, {
+    // Clone modal to avoid "hidden" issues
+    const clone = modalElement.cloneNode(true);
+    clone.style.position = 'absolute';
+    clone.style.left = '-9999px';
+    clone.style.display = 'block';
+    document.body.appendChild(clone);
+
+    html2canvas(clone, {
         scale: 3,
         backgroundColor: getComputedStyle(modalElement).backgroundColor || '#2b2b2b',
         useCORS: true
     }).then(canvas => {
+        if (!canvas) {
+            throw new Error("Canvas generation failed");
+        }
         canvas.toBlob(blob => {
+            if (!blob) {
+                throw new Error("Blob creation failed");
+            }
             const link = document.createElement('a');
             link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
             link.href = URL.createObjectURL(blob);
@@ -328,6 +341,9 @@ downloadButton.addEventListener('click', () => {
         }, 'image/png');
     }).catch(err => {
         console.error("Error generating invoice image:", err);
+        alert("Failed to generate image. Please try again.");
+    }).finally(() => {
+        document.body.removeChild(clone);
     });
 });
 
