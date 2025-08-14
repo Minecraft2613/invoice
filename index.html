@@ -22,19 +22,25 @@
         </div>
 
         <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Material Name</th>
-                        <th style="width: 150px;">Quantity</th>
-                        <th style="width: 150px;">Cost</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="item-list">
-                    </tbody>
-            </table>
-        </div>
+    <!-- Search bar moved inside table-wrapper -->
+    <div class="search-section" style="padding: 10px; background-color: #2b2b2b;">
+        <input type="text" id="item-search" placeholder="Search blocks...">
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Material Name</th>
+                <th style="width: 150px;">Quantity</th>
+                <th style="width: 150px;">Cost</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="item-list">
+        </tbody>
+    </table>
+</div>
+
 
         <div id="selected-items-display">
             <h2>Selected Items</h2>
