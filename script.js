@@ -307,19 +307,16 @@ document.addEventListener('DOMContentLoaded', () => {
     previewButton.addEventListener('click', previewInvoice);
 
 downloadButton.addEventListener('click', () => {
-    // Select the WHOLE modal container (not just the table)
-    const modalElement = document.querySelector('.modal-content'); // Change selector if needed
+    const modalElement = document.querySelector('.modal'); // Outer modal container
+    const wasHidden = modalElement.style.display === 'none';
 
-    if (!modalElement) {
-        alert("Please preview the invoice before downloading.");
-        return;
+    // If modal is hidden, temporarily show it for screenshot
+    if (wasHidden) {
+        modalElement.style.display = 'block';
     }
 
-    // Ensure modal is scrolled to top for a clean capture
-    modalElement.scrollTop = 0;
-
     html2canvas(modalElement, {
-        scale: 3, // High resolution
+        scale: 3,
         backgroundColor: getComputedStyle(modalElement).backgroundColor || '#2b2b2b',
         useCORS: true
     }).then(canvas => {
@@ -327,13 +324,12 @@ downloadButton.addEventListener('click', () => {
         link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
-    }).catch(err => {
-        console.error("Error generating invoice image:", err);
+    }).finally(() => {
+        if (wasHidden) {
+            modalElement.style.display = 'none';
+        }
     });
 });
-
-
-
 
     closeModalButton.addEventListener('click', () => {
         previewModal.style.display = 'none';
