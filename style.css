@@ -120,6 +120,15 @@ input:checked + .slider:before {
     overflow-y: auto;
 }
 
+/* Sticky table header */
+thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #3b3b3b;
+}
+
+/* Table styling */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -139,7 +148,6 @@ th, td {
 }
 
 th {
-    background-color: #3b3b3b;
     font-weight: 600;
     color: #999;
     text-transform: uppercase;
