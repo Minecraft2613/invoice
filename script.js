@@ -311,50 +311,69 @@ downloadButton.addEventListener('click', () => {
     tempDiv.style.position = 'absolute';
     tempDiv.style.left = '-9999px';
     tempDiv.style.top = '0';
-    tempDiv.style.width = '1000px'; // Force wide export
-    tempDiv.style.padding = '20px';
-    tempDiv.style.backgroundColor = '#2b2b2b'; // Dark background for invoice
+    tempDiv.style.width = '1100px'; // Large enough for full layout
+    tempDiv.style.padding = '30px';
+    tempDiv.style.backgroundColor = '#2b2b2b';
     tempDiv.style.color = '#f0f0f0';
     tempDiv.style.fontFamily = 'Arial, sans-serif';
     tempDiv.style.borderRadius = '10px';
+    tempDiv.style.boxSizing = 'border-box';
 
     document.body.appendChild(tempDiv);
 
+    // Title
     let downloadContent = `
-        <div class="download-invoice-container">
-            <h1 style="color: #4CAF50; text-align: center;">${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice</h1>
-            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                <thead>
-                    <tr style="background-color: #3b3b3b; color: #fff;">
-                        <th style="padding: 10px; text-align: left;">Material Name</th>
-                        <th style="padding: 10px; text-align: left;">Quantity</th>
-                        <th style="padding: 10px; text-align: left;">Cost</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <h1 style="color: #4CAF50; text-align: center; font-size: 2rem; margin-bottom: 20px;">
+            ${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice
+        </h1>
+
+        <!-- Table -->
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead>
+                <tr style="background-color: #3b3b3b; color: #fff;">
+                    <th style="padding: 12px; text-align: left;">MATERIAL NAME</th>
+                    <th style="padding: 12px; text-align: left;">QUANTITY</th>
+                    <th style="padding: 12px; text-align: left;">COST</th>
+                </tr>
+            </thead>
+            <tbody>
     `;
 
     let currentSubtotal = 0;
     const isBuying = buySellToggle.checked;
 
+    // Items
     for (const itemName in cart) {
         const item = cart[itemName];
         const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
         const itemCost = price * item.quantity;
         currentSubtotal += itemCost;
+
         downloadContent += `
             <tr>
-                <td style="padding: 8px;">${item.name}</td>
-                <td style="padding: 8px;">${item.quantity}</td>
-                <td style="padding: 8px;">${itemCost.toFixed(2)}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #444;">${item.name}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #444;">${item.quantity}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #444;">${itemCost.toFixed(2)}</td>
             </tr>
         `;
     }
 
     if (Object.keys(cart).length === 0) {
-        downloadContent += `<tr><td colspan="3" style="text-align: center; padding: 8px;">No items in cart.</td></tr>`;
+        downloadContent += `
+            <tr>
+                <td colspan="3" style="padding: 15px; text-align: center; border-bottom: 1px solid #444;">
+                    No items in cart.
+                </td>
+            </tr>
+        `;
     }
 
+    downloadContent += `
+            </tbody>
+        </table>
+    `;
+
+    // Totals
     const gstRate = parseFloat(gstInput.value) || 0;
     const gstAmount = currentSubtotal * (gstRate / 100);
 
@@ -364,15 +383,22 @@ downloadButton.addEventListener('click', () => {
     const totalAmount = currentSubtotal + gstAmount + taxAmount;
 
     downloadContent += `
-                </tbody>
-            </table>
-            <div style="margin-top: 20px;">
-                <div style="padding: 5px 0;">Subtotal: ${currentSubtotal.toFixed(2)}</div>
-                <div style="padding: 5px 0;">GST (${gstRate}%): ${gstAmount.toFixed(2)}</div>
-                <div style="padding: 5px 0;">Tax (${taxRate}%): ${taxAmount.toFixed(2)}</div>
-                <div style="padding: 5px 0; font-size: 1.2em; color: #4CAF50; font-weight: bold;">
-                    Total Amount: ${totalAmount.toFixed(2)}
-                </div>
+        <div style="margin-top: 15px; border-top: 1px solid #4CAF50; padding-top: 15px;">
+            <div style="display: flex; justify-content: space-between; padding: 6px 0;">
+                <span>Subtotal:</span>
+                <span>${currentSubtotal.toFixed(2)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 6px 0;">
+                <span>GST (${gstRate}%):</span>
+                <span>${gstAmount.toFixed(2)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 6px 0;">
+                <span>Tax (${taxRate}%):</span>
+                <span>${taxAmount.toFixed(2)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 1.3rem; font-weight: bold; color: #4CAF50;">
+                <span>Total Amount:</span>
+                <span>${totalAmount.toFixed(2)}</span>
             </div>
         </div>
     `;
@@ -380,7 +406,7 @@ downloadButton.addEventListener('click', () => {
     tempDiv.innerHTML = downloadContent;
 
     html2canvas(tempDiv, {
-        scale: 3, // High resolution
+        scale: 3,
         backgroundColor: '#2b2b2b'
     }).then(canvas => {
         const link = document.createElement('a');
@@ -391,6 +417,7 @@ downloadButton.addEventListener('click', () => {
         document.body.removeChild(tempDiv);
     });
 });
+
 
 
     closeModalButton.addEventListener('click', () => {
