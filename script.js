@@ -307,31 +307,14 @@ document.addEventListener('DOMContentLoaded', () => {
     previewButton.addEventListener('click', previewInvoice);
     
 downloadButton.addEventListener('click', () => {
-    const previewModalContent = document.querySelector('.modal-content'); // replace with your modal's content selector
+    const previewModalContent = document.querySelector('.modal-content');
 
     if (!previewModalContent) {
         alert("Please preview the invoice before downloading.");
         return;
     }
 
-    // Create an off-screen container
-    const tempDiv = document.createElement('div');
-    tempDiv.style.position = 'absolute';
-    tempDiv.style.left = '-9999px';
-    tempDiv.style.top = '0';
-    tempDiv.style.width = '800px';
-    tempDiv.style.backgroundColor = '#2b2b2b';
-    tempDiv.style.color = '#f0f0f0';
-    tempDiv.style.fontFamily = 'Arial, sans-serif';
-    tempDiv.style.borderRadius = '10px';
-    tempDiv.style.padding = '20px';
-    tempDiv.style.boxSizing = 'border-box';
-    tempDiv.innerHTML = previewModalContent.innerHTML; // Copy content
-
-    document.body.appendChild(tempDiv);
-
-    // Capture with html2canvas
-    html2canvas(tempDiv, {
+    html2canvas(previewModalContent, {
         scale: 3,
         useCORS: true,
         backgroundColor: '#2b2b2b'
@@ -339,21 +322,16 @@ downloadButton.addEventListener('click', () => {
         canvas.toBlob(blob => {
             if (!blob) {
                 alert("Image creation failed.");
-                document.body.removeChild(tempDiv);
                 return;
             }
-
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
             link.click();
             URL.revokeObjectURL(link.href);
-
-            document.body.removeChild(tempDiv);
         }, 'image/png');
     }).catch(err => {
         console.error("Error generating invoice image:", err);
-        document.body.removeChild(tempDiv);
     });
 });
 
