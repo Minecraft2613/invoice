@@ -305,21 +305,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     previewButton.addEventListener('click', previewInvoice);
-    
-downloadButton.addEventListener('click', () => {
-    const modalContent = document.querySelector('.modal'); // your preview modal
+
+    downloadButton.addEventListener('click', () => {
+    const modalContent = document.querySelector('.modal'); // Your preview modal container
 
     if (!modalContent) {
         alert("Please preview the invoice before downloading.");
         return;
     }
 
-    // Clone modal so styles apply
+    // Clone modal while it's still styled
     const clone = modalContent.cloneNode(true);
     clone.style.position = 'absolute';
-    clone.style.left = '-9999px';
-    clone.style.display = 'block';
-    clone.style.backgroundColor = '#2b2b2b'; // match your preview background
+    clone.style.left = '-9999px'; // Off-screen but still rendered
+    clone.style.display = 'block'; // Force visible
+    clone.style.backgroundColor = '#2b2b2b'; // Your modal's background
     document.body.appendChild(clone);
 
     html2canvas(clone, {
@@ -330,7 +330,7 @@ downloadButton.addEventListener('click', () => {
         canvas.toBlob(blob => {
             if (!blob) {
                 console.error("Failed to create image blob.");
-                alert("Image capture failed. Try again.");
+                alert("Image capture failed.");
                 document.body.removeChild(clone);
                 return;
             }
