@@ -306,26 +306,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     previewButton.addEventListener('click', previewInvoice);
 
-   downloadButton.addEventListener('click', () => {
-    // Generate the invoice preview so modal has latest cart data
+downloadButton.addEventListener('click', () => {
+    // Make sure invoice is up-to-date
     previewInvoice();
 
-    // Wait a moment for styles and fonts to render before capturing
+    // Wait a bit for rendering
     setTimeout(() => {
-        const modalContent = document.querySelector('.modal-content');
+        // Target the element that contains the *entire* invoice
+        // Replace '#invoicePreview' if your container has a different ID
+        const invoiceContent = document.querySelector('#invoicePreview');
 
-        if (!modalContent) {
-            console.error("Modal content not found.");
+        if (!invoiceContent) {
+            console.error("Invoice content not found.");
             return;
         }
 
-        // Capture the modal exactly as it looks on screen
-        html2canvas(modalContent, {
-            scale: 2,               // High resolution output
-            backgroundColor: null,  // Keep existing dark theme
-            useCORS: true           // Support for external assets
+        // Capture the full scroll height/width of the invoice
+        html2canvas(invoiceContent, {
+            scale: 2,
+            backgroundColor: null, // keep dark theme
+            useCORS: true,
+            windowWidth: invoiceContent.scrollWidth,
+            windowHeight: invoiceContent.scrollHeight
         }).then(canvas => {
-            // Trigger file download
+            // Download the PNG
             const link = document.createElement('a');
             link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
             link.href = canvas.toDataURL('image/png');
@@ -333,12 +337,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }).catch(err => {
             console.error("Error capturing invoice:", err);
         }).finally(() => {
-            // Close the preview modal after download
+            // Close the modal after capture
             previewModal.style.display = 'none';
         });
-    }, 300); // Delay in ms to ensure rendering is complete
+    }, 300);
 });
-
 
     closeModalButton.addEventListener('click', () => {
         previewModal.style.display = 'none';
