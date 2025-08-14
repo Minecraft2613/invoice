@@ -86,9 +86,8 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-/* Search Section inside table wrapper */
+/* Search Section */
 .search-section {
-    width: 100%;
     padding: 10px;
     background-color: #2b2b2b;
 }
@@ -111,35 +110,51 @@ input:checked + .slider:before {
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
 }
 
-/* Black outlined table wrapper */
+/* Table Wrapper */
 .table-wrapper {
     border: 2px solid black;
     border-radius: 6px;
-    max-height: 350px;
     background-color: #2b2b2b;
-    overflow-y: auto;
 }
 
-/* Sticky table header */
-thead th {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    background-color: #3b3b3b;
-}
-
-/* Table styling */
+/* Table Header */
 table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
 }
 
-/* Apply specific widths to headers */
-thead th:nth-child(1) { width: auto; }
-thead th:nth-child(2) { width: 120px; }
-thead th:nth-child(3) { width: 120px; }
-thead th:nth-child(4) { width: 100px; }
+thead th {
+    background-color: #3b3b3b;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+/* Column Widths */
+thead th:nth-child(1),
+tbody td:nth-child(1) { width: auto; }
+thead th:nth-child(2),
+tbody td:nth-child(2) { width: 120px; }
+thead th:nth-child(3),
+tbody td:nth-child(3) { width: 120px; }
+thead th:nth-child(4),
+tbody td:nth-child(4) { width: 100px; }
+
+/* Scrollable Rows */
+.table-body-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.table-body-scroll table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
 
 th, td {
     padding: 15px;
@@ -147,33 +162,11 @@ th, td {
     border-bottom: 1px solid #444;
 }
 
-th {
-    font-weight: 600;
-    color: #999;
-    text-transform: uppercase;
-}
-
 tr:hover {
     background-color: #333;
 }
 
-/* Remove scroll from tbody, apply to wrapper */
-tbody#item-list {
-    display: table-row-group;
-}
-
-tbody#item-list tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-}
-
-/* Match widths to headers */
-tbody#item-list td:nth-child(1) { width: auto; }
-tbody#item-list td:nth-child(2) { width: 120px; }
-tbody#item-list td:nth-child(3) { width: 120px; }
-tbody#item-list td:nth-child(4) { width: 100px; }
-
+/* Number Inputs */
 td input[type="number"] {
     width: 80px;
     padding: 8px;
@@ -190,7 +183,7 @@ td input[type="number"]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-/* Styles for the new selected items display */
+/* Selected Items */
 #selected-items-display {
     background-color: #2b2b2b;
     border-radius: 8px;
@@ -231,6 +224,7 @@ td input[type="number"]::-webkit-outer-spin-button {
     background-color: #333;
 }
 
+/* Summary */
 .summary {
     display: flex;
     flex-direction: column;
@@ -267,6 +261,7 @@ td input[type="number"]::-webkit-outer-spin-button {
     padding-top: 15px;
 }
 
+/* Buttons */
 .invoice-buttons {
     display: flex;
     gap: 15px;
@@ -301,7 +296,7 @@ td input[type="number"]::-webkit-outer-spin-button {
     transform: translateY(-2px);
 }
 
-/* Modal for Preview */
+/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -338,72 +333,4 @@ td input[type="number"]::-webkit-outer-spin-button {
 .close-button:focus {
     color: #fff;
     text-decoration: none;
-}
-
-/* Styles for the downloaded invoice image */
-.download-invoice-container {
-    background-color: #ffffff;
-    color: #000000;
-    padding: 30px;
-    border-radius: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    width: 800px;
-    box-sizing: border-box;
-}
-
-.download-invoice-container h1 {
-    color: #4CAF50;
-    font-size: 2.2rem;
-    font-weight: 700;
-    text-shadow: none;
-    margin-bottom: 20px;
-}
-
-.download-invoice-container table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    table-layout: fixed;
-}
-
-.download-invoice-container th,
-.download-invoice-container td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.download-invoice-container th {
-    background-color: #3b3b3b;
-    font-weight: 600;
-    color: #f0f0f0;
-    text-transform: uppercase;
-}
-
-.download-invoice-container tr:hover {
-    background-color: #f9f9f9;
-}
-
-.download-invoice-container .summary {
-    background-color: #f2f2f2;
-    padding: 20px;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.download-invoice-container .tax-row,
-.download-invoice-container .total-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.download-invoice-container .total-row {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #4CAF50;
-    border-top: 2px solid #4CAF50;
-    padding-top: 15px;
 }
