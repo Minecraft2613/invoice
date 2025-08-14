@@ -305,33 +305,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     previewButton.addEventListener('click', previewInvoice);
+    
+downloadButton.addEventListener('click', () => {
+    const previewModalContent = document.querySelector('.modal-content'); // replace with your modal's content selector
 
-    downloadButton.addEventListener('click', () => {
-    const modalContent = document.querySelector('.modal'); // Your preview modal container
-
-    if (!modalContent) {
+    if (!previewModalContent) {
         alert("Please preview the invoice before downloading.");
         return;
     }
 
-    // Clone modal while it's still styled
-    const clone = modalContent.cloneNode(true);
-    clone.style.position = 'absolute';
-    clone.style.left = '-9999px'; // Off-screen but still rendered
-    clone.style.display = 'block'; // Force visible
-    clone.style.backgroundColor = '#2b2b2b'; // Your modal's background
-    document.body.appendChild(clone);
+    // Create an off-screen container
+    const tempDiv = document.createElement('div');
+    tempDiv.style.position = 'absolute';
+    tempDiv.style.left = '-9999px';
+    tempDiv.style.top = '0';
+    tempDiv.style.width = '800px';
+    tempDiv.style.backgroundColor = '#2b2b2b';
+    tempDiv.style.color = '#f0f0f0';
+    tempDiv.style.fontFamily = 'Arial, sans-serif';
+    tempDiv.style.borderRadius = '10px';
+    tempDiv.style.padding = '20px';
+    tempDiv.style.boxSizing = 'border-box';
+    tempDiv.innerHTML = previewModalContent.innerHTML; // Copy content
 
-    html2canvas(clone, {
+    document.body.appendChild(tempDiv);
+
+    // Capture with html2canvas
+    html2canvas(tempDiv, {
         scale: 3,
         useCORS: true,
         backgroundColor: '#2b2b2b'
     }).then(canvas => {
         canvas.toBlob(blob => {
             if (!blob) {
-                console.error("Failed to create image blob.");
-                alert("Image capture failed.");
-                document.body.removeChild(clone);
+                alert("Image creation failed.");
+                document.body.removeChild(tempDiv);
                 return;
             }
 
@@ -341,12 +349,11 @@ document.addEventListener('DOMContentLoaded', () => {
             link.click();
             URL.revokeObjectURL(link.href);
 
-            document.body.removeChild(clone);
+            document.body.removeChild(tempDiv);
         }, 'image/png');
     }).catch(err => {
-        console.error("Error generating image:", err);
-        alert("Something went wrong while creating the image.");
-        document.body.removeChild(clone);
+        console.error("Error generating invoice image:", err);
+        document.body.removeChild(tempDiv);
     });
 });
 
