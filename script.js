@@ -307,44 +307,45 @@ document.addEventListener('DOMContentLoaded', () => {
     previewButton.addEventListener('click', previewInvoice);
     
 downloadButton.addEventListener('click', () => {
-    const modalElement = document.querySelector('.modal');
+    const modalContent = document.querySelector('.modal'); // your preview modal
 
-    if (!modalElement) {
+    if (!modalContent) {
         alert("Please preview the invoice before downloading.");
         return;
     }
 
-    // Clone the modal so it's visible for capture
-    const clone = modalElement.cloneNode(true);
+    // Clone modal so styles apply
+    const clone = modalContent.cloneNode(true);
     clone.style.position = 'absolute';
     clone.style.left = '-9999px';
-    clone.style.top = '0';
     clone.style.display = 'block';
+    clone.style.backgroundColor = '#2b2b2b'; // match your preview background
     document.body.appendChild(clone);
 
     html2canvas(clone, {
         scale: 3,
-        backgroundColor: getComputedStyle(modalElement).backgroundColor || '#2b2b2b',
-        useCORS: true
+        useCORS: true,
+        backgroundColor: '#2b2b2b'
     }).then(canvas => {
         canvas.toBlob(blob => {
             if (!blob) {
-                alert("Image creation failed. Please try again.");
+                console.error("Failed to create image blob.");
+                alert("Image capture failed. Try again.");
                 document.body.removeChild(clone);
                 return;
             }
 
             const link = document.createElement('a');
-            link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
             link.href = URL.createObjectURL(blob);
+            link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
             link.click();
             URL.revokeObjectURL(link.href);
 
             document.body.removeChild(clone);
         }, 'image/png');
-    }).catch(error => {
-        console.error("Error generating image:", error);
-        alert("Something went wrong while generating the image.");
+    }).catch(err => {
+        console.error("Error generating image:", err);
+        alert("Something went wrong while creating the image.");
         document.body.removeChild(clone);
     });
 });
