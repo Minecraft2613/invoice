@@ -24,7 +24,7 @@ body {
     animation: fadeIn 0.5s ease-out;
 }
 
- @keyframes fadeIn {
+@keyframes fadeIn {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
 }
@@ -86,16 +86,18 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
+/* Search Section inside table wrapper */
 .search-section {
     width: 100%;
-    margin-top: 10px;
+    padding: 10px;
+    background-color: #2b2b2b;
 }
 
 #item-search {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
-    border: 2px solid black; /* Changed */
+    border: 2px solid black;
     background-color: #333;
     color: #f0f0f0;
     font-size: 1rem;
@@ -105,27 +107,30 @@ input:checked + .slider:before {
 
 #item-search:focus {
     outline: none;
-    border-color: black; /* Changed */
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.8); /* Optional glow */
+    border-color: black;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
 }
 
-
+/* Black outlined table wrapper */
 .table-wrapper {
-    overflow-x: auto;
+    border: 2px solid black;
+    border-radius: 6px;
+    max-height: 350px;
+    background-color: #2b2b2b;
+    overflow-y: auto;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Crucial: Ensures columns respect defined widths */
+    table-layout: fixed;
 }
 
 /* Apply specific widths to headers */
-thead th:nth-child(1) { width: auto; /* Material Name will take remaining space */ }
-thead th:nth-child(2) { width: 120px; /* Quantity column */ }
-thead th:nth-child(3) { width: 120px; /* Cost column */ }
-thead th:nth-child(4) { width: 100px; /* Action column */ }
-
+thead th:nth-child(1) { width: auto; }
+thead th:nth-child(2) { width: 120px; }
+thead th:nth-child(3) { width: 120px; }
+thead th:nth-child(4) { width: 100px; }
 
 th, td {
     padding: 15px;
@@ -144,28 +149,25 @@ tr:hover {
     background-color: #333;
 }
 
+/* Remove scroll from tbody, apply to wrapper */
 tbody#item-list {
-    display: block; /* Keep display block for overflow-y */
-    max-height: 300px; /* Adjust height as needed */
-    overflow-y: auto;
+    display: table-row-group;
 }
 
 tbody#item-list tr {
-    /* Ensure the table rows are displayed as table rows within the block tbody */
-    display: table; /* This makes the tr behave like a table */
-    width: 100%; /* And stretch to full width */
-    table-layout: fixed; /* Apply fixed layout to inner rows too for consistent cell sizing */
+    display: table;
+    width: 100%;
+    table-layout: fixed;
 }
 
-/* Apply specific widths to cells within the tbody rows to match headers */
-tbody#item-list td:nth-child(1) { width: auto; } /* Material Name */
-tbody#item-list td:nth-child(2) { width: 120px; } /* Quantity */
-tbody#item-list td:nth-child(3) { width: 120px; } /* Cost */
-tbody#item-list td:nth-child(4) { width: 100px; } /* Action */
-
+/* Match widths to headers */
+tbody#item-list td:nth-child(1) { width: auto; }
+tbody#item-list td:nth-child(2) { width: 120px; }
+tbody#item-list td:nth-child(3) { width: 120px; }
+tbody#item-list td:nth-child(4) { width: 100px; }
 
 td input[type="number"] {
-    width: 80px; /* This width is for the input field itself, not the cell */
+    width: 80px;
     padding: 8px;
     background-color: #444;
     border: 1px solid #555;
@@ -199,7 +201,7 @@ td input[type="number"]::-webkit-outer-spin-button {
 .selected-items-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Also crucial for the selected items table */
+    table-layout: fixed;
 }
 
 .selected-items-table th,
@@ -332,12 +334,12 @@ td input[type="number"]::-webkit-outer-spin-button {
 
 /* Styles for the downloaded invoice image */
 .download-invoice-container {
-    background-color: #ffffff; /* White background for download */
-    color: #000000; /* Black text for download */
+    background-color: #ffffff;
+    color: #000000;
     padding: 30px;
     border-radius: 12px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    width: 800px; /* Fixed width for consistency */
+    width: 800px;
     box-sizing: border-box;
 }
 
@@ -345,7 +347,7 @@ td input[type="number"]::-webkit-outer-spin-button {
     color: #4CAF50;
     font-size: 2.2rem;
     font-weight: 700;
-    text-shadow: none; /* Remove text shadow for print */
+    text-shadow: none;
     margin-bottom: 20px;
 }
 
@@ -353,29 +355,29 @@ td input[type="number"]::-webkit-outer-spin-button {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    table-layout: fixed; /* Essential for downloaded image table as well */
+    table-layout: fixed;
 }
 
 .download-invoice-container th,
 .download-invoice-container td {
     padding: 15px;
     text-align: left;
-    border-bottom: 1px solid #ddd; /* Lighter border for print */
+    border-bottom: 1px solid #ddd;
 }
 
 .download-invoice-container th {
-    background-color: #3b3b3b; /* Dark background for download headers*/
+    background-color: #3b3b3b;
     font-weight: 600;
-    color: #f0f0f0; /* Light text for download headers*/
+    color: #f0f0f0;
     text-transform: uppercase;
 }
 
 .download-invoice-container tr:hover {
-    background-color: #f9f9f9; /* Lighter hover effect */
+    background-color: #f9f9f9;
 }
 
 .download-invoice-container .summary {
-    background-color: #f2f2f2; /* Lighter summary background */
+    background-color: #f2f2f2;
     padding: 20px;
     border-radius: 8px;
     display: flex;
