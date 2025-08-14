@@ -306,26 +306,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     previewButton.addEventListener('click', previewInvoice);
 
-    downloadButton.addEventListener('click', () => {
-    // 1. Generate the preview content first (so modal is ready to capture)
+   downloadButton.addEventListener('click', () => {
+    // Generate the invoice preview so modal has latest cart data
     previewInvoice();
 
-    // 2. Small delay to ensure modal content is fully rendered before capturing
+    // Wait a moment for styles and fonts to render before capturing
     setTimeout(() => {
         const modalContent = document.querySelector('.modal-content');
 
         if (!modalContent) {
-            console.error("Modal content not found. Cannot capture invoice.");
+            console.error("Modal content not found.");
             return;
         }
 
-        // 3. Capture the modal as it appears on screen
+        // Capture the modal exactly as it looks on screen
         html2canvas(modalContent, {
-            scale: 2,                // High resolution
-            backgroundColor: null,   // Preserve the dark theme
-            useCORS: true            // Handle any external assets
+            scale: 2,               // High resolution output
+            backgroundColor: null,  // Keep existing dark theme
+            useCORS: true           // Support for external assets
         }).then(canvas => {
-            // 4. Create download link
+            // Trigger file download
             const link = document.createElement('a');
             link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
             link.href = canvas.toDataURL('image/png');
@@ -333,11 +333,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }).catch(err => {
             console.error("Error capturing invoice:", err);
         }).finally(() => {
-            // 5. Close the modal automatically
+            // Close the preview modal after download
             previewModal.style.display = 'none';
         });
-    }, 300); // Delay in milliseconds (adjust if needed)
+    }, 300); // Delay in ms to ensure rendering is complete
 });
+
 
     closeModalButton.addEventListener('click', () => {
         previewModal.style.display = 'none';
