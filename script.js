@@ -308,11 +308,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 downloadButton.addEventListener('click', () => {
     const modalElement = document.querySelector('.modal'); // Outer modal container
-    const wasHidden = modalElement.style.display === 'none';
 
-    // If modal is hidden, temporarily show it for screenshot
-    if (wasHidden) {
-        modalElement.style.display = 'block';
+    if (!modalElement) {
+        alert("Please preview the invoice before downloading.");
+        return;
     }
 
     html2canvas(modalElement, {
@@ -320,14 +319,15 @@ downloadButton.addEventListener('click', () => {
         backgroundColor: getComputedStyle(modalElement).backgroundColor || '#2b2b2b',
         useCORS: true
     }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    }).finally(() => {
-        if (wasHidden) {
-            modalElement.style.display = 'none';
-        }
+        canvas.toBlob(blob => {
+            const link = document.createElement('a');
+            link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }, 'image/png');
+    }).catch(err => {
+        console.error("Error generating invoice image:", err);
     });
 });
 
