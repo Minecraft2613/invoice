@@ -307,23 +307,21 @@ document.addEventListener('DOMContentLoaded', () => {
     previewButton.addEventListener('click', previewInvoice);
 
 downloadButton.addEventListener('click', () => {
-    // Select your preview modal/container directly
-    const invoiceElement = document.querySelector('.invoice-preview-modal'); 
-    // Replace with the actual selector for your preview container
+    // Select the WHOLE modal container (not just the table)
+    const modalElement = document.querySelector('.modal-content'); // Change selector if needed
 
-    if (!invoiceElement) {
+    if (!modalElement) {
         alert("Please preview the invoice before downloading.");
         return;
     }
 
-    // Ensure the element is fully visible before capturing
-    invoiceElement.scrollTop = 0;
+    // Ensure modal is scrolled to top for a clean capture
+    modalElement.scrollTop = 0;
 
-    html2canvas(invoiceElement, {
-        scale: 3, // High resolution export
-        backgroundColor: getComputedStyle(invoiceElement).backgroundColor || '#2b2b2b',
-        useCORS: true,
-        logging: false
+    html2canvas(modalElement, {
+        scale: 3, // High resolution
+        backgroundColor: getComputedStyle(modalElement).backgroundColor || '#2b2b2b',
+        useCORS: true
     }).then(canvas => {
         const link = document.createElement('a');
         link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
