@@ -307,116 +307,33 @@ document.addEventListener('DOMContentLoaded', () => {
     previewButton.addEventListener('click', previewInvoice);
 
 downloadButton.addEventListener('click', () => {
-    const tempDiv = document.createElement('div');
-    tempDiv.style.position = 'absolute';
-    tempDiv.style.left = '-9999px';
-    tempDiv.style.top = '0';
-    tempDiv.style.width = '1100px'; // Large enough for full layout
-    tempDiv.style.padding = '30px';
-    tempDiv.style.backgroundColor = '#2b2b2b';
-    tempDiv.style.color = '#f0f0f0';
-    tempDiv.style.fontFamily = 'Arial, sans-serif';
-    tempDiv.style.borderRadius = '10px';
-    tempDiv.style.boxSizing = 'border-box';
+    // Select your preview modal/container directly
+    const invoiceElement = document.querySelector('.invoice-preview-modal'); 
+    // Replace with the actual selector for your preview container
 
-    document.body.appendChild(tempDiv);
-
-    // Title
-    let downloadContent = `
-        <h1 style="color: #4CAF50; text-align: center; font-size: 2rem; margin-bottom: 20px;">
-            ${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice
-        </h1>
-
-        <!-- Table -->
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-            <thead>
-                <tr style="background-color: #3b3b3b; color: #fff;">
-                    <th style="padding: 12px; text-align: left;">MATERIAL NAME</th>
-                    <th style="padding: 12px; text-align: left;">QUANTITY</th>
-                    <th style="padding: 12px; text-align: left;">COST</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-    let currentSubtotal = 0;
-    const isBuying = buySellToggle.checked;
-
-    // Items
-    for (const itemName in cart) {
-        const item = cart[itemName];
-        const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
-        const itemCost = price * item.quantity;
-        currentSubtotal += itemCost;
-
-        downloadContent += `
-            <tr>
-                <td style="padding: 10px; border-bottom: 1px solid #444;">${item.name}</td>
-                <td style="padding: 10px; border-bottom: 1px solid #444;">${item.quantity}</td>
-                <td style="padding: 10px; border-bottom: 1px solid #444;">${itemCost.toFixed(2)}</td>
-            </tr>
-        `;
+    if (!invoiceElement) {
+        alert("Please preview the invoice before downloading.");
+        return;
     }
 
-    if (Object.keys(cart).length === 0) {
-        downloadContent += `
-            <tr>
-                <td colspan="3" style="padding: 15px; text-align: center; border-bottom: 1px solid #444;">
-                    No items in cart.
-                </td>
-            </tr>
-        `;
-    }
+    // Ensure the element is fully visible before capturing
+    invoiceElement.scrollTop = 0;
 
-    downloadContent += `
-            </tbody>
-        </table>
-    `;
-
-    // Totals
-    const gstRate = parseFloat(gstInput.value) || 0;
-    const gstAmount = currentSubtotal * (gstRate / 100);
-
-    const taxRate = parseFloat(taxInput.value) || 0;
-    const taxAmount = currentSubtotal * (taxRate / 100);
-
-    const totalAmount = currentSubtotal + gstAmount + taxAmount;
-
-    downloadContent += `
-        <div style="margin-top: 15px; border-top: 1px solid #4CAF50; padding-top: 15px;">
-            <div style="display: flex; justify-content: space-between; padding: 6px 0;">
-                <span>Subtotal:</span>
-                <span>${currentSubtotal.toFixed(2)}</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; padding: 6px 0;">
-                <span>GST (${gstRate}%):</span>
-                <span>${gstAmount.toFixed(2)}</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; padding: 6px 0;">
-                <span>Tax (${taxRate}%):</span>
-                <span>${taxAmount.toFixed(2)}</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 1.3rem; font-weight: bold; color: #4CAF50;">
-                <span>Total Amount:</span>
-                <span>${totalAmount.toFixed(2)}</span>
-            </div>
-        </div>
-    `;
-
-    tempDiv.innerHTML = downloadContent;
-
-    html2canvas(tempDiv, {
-        scale: 3,
-        backgroundColor: '#2b2b2b'
+    html2canvas(invoiceElement, {
+        scale: 3, // High resolution export
+        backgroundColor: getComputedStyle(invoiceElement).backgroundColor || '#2b2b2b',
+        useCORS: true,
+        logging: false
     }).then(canvas => {
         const link = document.createElement('a');
         link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
-    }).finally(() => {
-        document.body.removeChild(tempDiv);
+    }).catch(err => {
+        console.error("Error generating invoice image:", err);
     });
 });
+
 
 
 
