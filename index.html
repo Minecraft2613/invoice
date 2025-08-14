@@ -18,22 +18,30 @@
         </div>
 
         <div class="table-wrapper">
-    <div class="search-section">
-        <input type="text" id="item-search" placeholder="Search blocks...">
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Material Name</th>
-                <th style="width: 150px;">Quantity</th>
-                <th style="width: 150px;">Cost</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="item-list"></tbody>
-    </table>
-</div>
+            <!-- Search bar -->
+            <div class="search-section">
+                <input type="text" id="item-search" placeholder="Search blocks...">
+            </div>
 
+            <!-- Table header -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Material Name</th>
+                        <th style="width: 150px;">Quantity</th>
+                        <th style="width: 150px;">Cost</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
+
+            <!-- Scrollable body -->
+            <div class="table-body-scroll">
+                <table>
+                    <tbody id="item-list"></tbody>
+                </table>
+            </div>
+        </div>
 
         <div id="selected-items-display">
             <h2>Selected Items</h2>
@@ -45,8 +53,7 @@
                         <th style="width: 150px;">Cost</th>
                     </tr>
                 </thead>
-                <tbody id="cart-summary-list">
-                    </tbody>
+                <tbody id="cart-summary-list"></tbody>
             </table>
         </div>
 
@@ -80,8 +87,7 @@
     <div id="previewModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-            <div id="invoicePreview">
-                </div>
+            <div id="invoicePreview"></div>
         </div>
     </div>
 
