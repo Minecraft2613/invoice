@@ -307,96 +307,97 @@ document.addEventListener('DOMContentLoaded', () => {
     previewButton.addEventListener('click', previewInvoice);
 
     downloadButton.addEventListener('click', () => {
-        const tempDiv = document.createElement('div');
-        tempDiv.style.position = 'absolute';
-        tempDiv.style.left = '-9999px';
-        tempDiv.style.top = '-9999px';
-        document.body.appendChild(tempDiv);
+    const tempDiv = document.createElement('div');
+    tempDiv.style.position = 'absolute';
+    tempDiv.style.left = '-9999px';
+    tempDiv.style.top = '-9999px';
+    tempDiv.style.backgroundColor = 'white'; // Force white background for download
+    tempDiv.style.color = 'black'; // Text color
+    tempDiv.style.padding = '20px';
+    tempDiv.style.fontFamily = 'Arial, sans-serif';
+    tempDiv.style.maxWidth = '800px';
+    tempDiv.style.border = '1px solid #ccc';
+    tempDiv.style.borderRadius = '10px';
 
-        let downloadContent = `
-            <div class="download-invoice-container">
-                <h1 style="text-align: center;">${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice</h1>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Material Name</th>
-                            <th>Quantity</th>
-                            <th>Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
+    let downloadContent = `
+        <h1 style="text-align:center; color:#4CAF50; font-size:28px; margin-bottom:20px;">
+            ${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice
+        </h1>
+        <table style="width:100%; border-collapse:collapse;">
+            <thead>
+                <tr style="background:#f0f0f0; border-bottom:2px solid #ccc;">
+                    <th style="padding:10px; text-align:left;">Material Name</th>
+                    <th style="padding:10px; text-align:left;">Quantity</th>
+                    <th style="padding:10px; text-align:left;">Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
 
-        let currentSubtotal = 0;
-        const isBuying = buySellToggle.checked;
-
-        for (const itemName in cart) {
-            const item = cart[itemName];
-            const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
-            const itemCost = price * item.quantity;
-            currentSubtotal += itemCost;
-            downloadContent += `
-                    <tr>
-                        <td>${item.name}</td>
-                        <td>${item.quantity}</td>
-                        <td>${itemCost.toFixed(2)}</td>
-                    </tr>
-                `;
-        }
-
-        if (Object.keys(cart).length === 0) {
-            downloadContent += `<tr><td colspan="3" style="text-align: center;">No items in cart.</td></tr>`;
-        }
-
+    let currentSubtotal = 0;
+    const isBuying = buySellToggle.checked;
+    for (const itemName in cart) {
+        const item = cart[itemName];
+        const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
+        const itemCost = price * item.quantity;
+        currentSubtotal += itemCost;
         downloadContent += `
-                    </tbody>
-                </table>
-                <div class="summary">
-                    <div class="tax-row">
-                        <span>Subtotal:</span>
-                        <span>${currentSubtotal.toFixed(2)}</span>
-                    </div>
-            `;
-
-        const gstRate = parseFloat(gstInput.value) || 0;
-        const gstAmount = currentSubtotal * (gstRate / 100);
-        
-        const taxRate = parseFloat(taxInput.value) || 0;
-        const taxAmount = currentSubtotal * (taxRate / 100);
-        
-        const totalAmount = currentSubtotal + gstAmount + taxAmount;
-
-        downloadContent += `
-                    <div class="tax-row">
-                        <span>GST (${gstRate}%):</span>
-                        <span>${gstAmount.toFixed(2)}</span>
-                    </div>
-                    <div class="tax-row">
-                        <span>Tax (${taxRate}%):</span>
-                        <span>${taxAmount.toFixed(2)}</span>
-                    </div>
-                    <div class="total-row">
-                        <strong>Total Amount:</strong>
-                        <span>${totalAmount.toFixed(2)}</span>
-                    </div>
-                </div>
-            </div>
+            <tr>
+                <td style="padding:10px; border-bottom:1px solid #eee;">${item.name}</td>
+                <td style="padding:10px; border-bottom:1px solid #eee;">${item.quantity}</td>
+                <td style="padding:10px; border-bottom:1px solid #eee;">${itemCost.toFixed(2)}</td>
+            </tr>
         `;
+    }
 
-        tempDiv.innerHTML = downloadContent;
+    if (Object.keys(cart).length === 0) {
+        downloadContent += `<tr><td colspan="3" style="padding:10px; text-align:center;">No items in cart.</td></tr>`;
+    }
 
-        html2canvas(tempDiv, {
-            scale: 2,
-            backgroundColor: '#ffffff'
-        }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        }).finally(() => {
-            document.body.removeChild(tempDiv);
-        });
+    const gstRate = parseFloat(gstInput.value) || 0;
+    const gstAmount = currentSubtotal * (gstRate / 100);
+    const taxRate = parseFloat(taxInput.value) || 0;
+    const taxAmount = currentSubtotal * (taxRate / 100);
+    const totalAmount = currentSubtotal + gstAmount + taxAmount;
+
+    downloadContent += `
+            </tbody>
+        </table>
+        <div style="margin-top:20px; border-top:2px solid #4CAF50; padding-top:10px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                <span>Subtotal:</span>
+                <span>${currentSubtotal.toFixed(2)}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                <span>GST (${gstRate}%):</span>
+                <span>${gstAmount.toFixed(2)}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                <span>Tax (${taxRate}%):</span>
+                <span>${taxAmount.toFixed(2)}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:18px; color:#4CAF50;">
+                <span>Total Amount:</span>
+                <span>${totalAmount.toFixed(2)}</span>
+            </div>
+        </div>
+    `;
+
+    tempDiv.innerHTML = downloadContent;
+    document.body.appendChild(tempDiv);
+
+    html2canvas(tempDiv, {
+        scale: 2,
+        backgroundColor: '#ffffff' // Ensures no black background
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }).finally(() => {
+        document.body.removeChild(tempDiv);
     });
+});
 
     closeModalButton.addEventListener('click', () => {
         previewModal.style.display = 'none';
