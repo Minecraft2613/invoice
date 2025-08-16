@@ -290,16 +290,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // OCR function
     async function ocrSpace(imageData) {
-        console.log("Calling OCR.space API...");
         // IMPORTANT: Storing API keys in client-side code is not secure and should be avoided in production applications.
         // This is included for demonstration purposes only, as requested.
-                const apiKey = 'K85010646488957'; // Replace with your actual OCR.space API key
+
+        // UNCOMMENT THE FOLLOWING BLOCK TO USE THE REAL OCR.SPACE API
+        /*
+        console.log("Calling OCR.space API...");
+        const apiKey = 'K85010646488957'; // Replace with your actual OCR.space API key
         const apiUrl = 'https://api.ocr.space/parse/image';
 
         const formData = new FormData();
         formData.append('base64Image', imageData);
         formData.append('apikey', apiKey);
-        // Add other parameters as required, e.g., 'language': 'eng'
+        formData.append('language', 'eng');
 
         try {
             const response = await fetch(apiUrl, {
@@ -316,12 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.IsErroredOnProcessing) {
                 console.error("API Error:", data.ErrorMessage);
             }
-            if (data.IsErroredOnProcessing) {
-                console.error("API Error:", data.ErrorMessage);
-            }
             
-            // Process the data to extract the item names and quantities
-            // This is a simplified example and may need to be adjusted based on the actual OCR results
             const processedResults = [];
             if (data.ParsedResults && data.ParsedResults.length > 0) {
                 const parsedText = data.ParsedResults[0].ParsedText;
@@ -341,6 +339,14 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error calling OCR API:', error);
             return [];
         }
+        */
+
+        // MOCK OCR RESULTS FOR LOCAL TESTING
+        console.log("Mock OCR running...");
+        return [
+            { name: "STONE", quantity: 10 },
+            { name: "DIAMOND", quantity: 5 }
+        ];
     }
 
     // Event Listeners
