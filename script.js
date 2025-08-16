@@ -324,7 +324,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log("Parsed Text:", parsedText);
 
                 // Use regex to extract material name and quantity
-                const materialRegex = /MATERIAL NAME\s+([A-Z0-9_\s]+?)(?:Subtotal:|GST|Tax|Total Amount|QUANTITY)/i;
+                // More robust regex to find material name and quantity independently
+                const materialRegex = /MATERIAL NAME\s+([A-Z0-9_\s]+?)(?:\s*Subtotal:|\s*GST|\s*Tax|\s*Total Amount|\s*QUANTITY|\s*COST|$)/i;
                 const quantityRegex = /QUANTITY\s+(\d+)/i;
 
                 const materialMatch = parsedText.match(materialRegex);
