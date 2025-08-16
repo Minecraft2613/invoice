@@ -478,7 +478,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const ocrResults = await ocrSpace(fullDataUrl);
 
                     ocrResults.forEach(result => {
-                        const item = allItems.find(i => i.name.toUpperCase() === result.name.toUpperCase());
+                        const ocrMaterialName = result.name.replace(/_/g, " "); // Replace underscores with spaces for matching
+                        const item = allItems.find(i => i.name.toUpperCase() === ocrMaterialName.toUpperCase());
                         if (item) {
                             cart[item.name] = { ...item, quantity: result.quantity };
                         }
