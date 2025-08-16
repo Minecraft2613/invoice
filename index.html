@@ -17,7 +17,9 @@
             </label>
         </div>
 
-        <div class="search-section">
+        <div class="table-wrapper">
+            <!-- Search bar -->
+            <div class="search-section">
             <input type="text" id="item-search" placeholder="Search blocks...">
         </div>
 
@@ -28,7 +30,7 @@
             <button id="make-list-button" class="btn btn-primary">Make List</button>
         </div>
 
-        <div class="table-wrapper">
+            <!-- Table header -->
             <table>
                 <thead>
                     <tr>
@@ -38,9 +40,14 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="item-list">
-                    </tbody>
             </table>
+
+            <!-- Scrollable body -->
+            <div class="table-body-scroll">
+                <table>
+                    <tbody id="item-list"></tbody>
+                </table>
+            </div>
         </div>
 
         <div id="selected-items-display">
@@ -53,8 +60,7 @@
                         <th style="width: 150px;">Cost</th>
                     </tr>
                 </thead>
-                <tbody id="cart-summary-list">
-                    </tbody>
+                <tbody id="cart-summary-list"></tbody>
             </table>
         </div>
 
@@ -88,8 +94,7 @@
     <div id="previewModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-            <div id="invoicePreview">
-                </div>
+            <div id="invoicePreview"></div>
         </div>
     </div>
 

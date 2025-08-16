@@ -288,22 +288,49 @@ document.addEventListener('DOMContentLoaded', () => {
         previewModal.style.display = 'flex';
     }
 
-    // Dummy OCR function
-    async function simulateOcr() {
-        // In a real application, you would send the images to an OCR API
-        // and get back a list of items. For now, we'll simulate this.
-        console.log("Simulating OCR analysis...");
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
-        
-        // This is where you would process the OCR results.
-        // For this example, we'll return a hardcoded list.
-        const ocrResults = [
-            { name: 'COBBLESTONE', quantity: 64 },
-            { name: 'DIRT', quantity: 32 },
-            { name: 'IRON_ORE', quantity: 16 }
-        ];
-        
-        return ocrResults;
+    // OCR function
+    async function ocrSpace(imageData) {
+        // IMPORTANT: Storing API keys in client-side code is not secure and should be avoided in production applications.
+        // This is included for demonstration purposes only, as requested.
+        const apiKey = 'K85010646488957'; // Replace with your actual OCR.space API key
+        const apiUrl = 'https://api.ocr.space/parse/image';
+
+        const formData = new FormData();
+        formData.append('base64Image', imageData);
+        formData.append('apikey', apiKey);
+        // Add other parameters as required, e.g., 'language': 'eng'
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error(`OCR API request failed with status ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            // Process the data to extract the item names and quantities
+            // This is a simplified example and may need to be adjusted based on the actual OCR results
+            const processedResults = [];
+            if (data.ParsedResults && data.ParsedResults.length > 0) {
+                const parsedText = data.ParsedResults[0].ParsedText;
+                const lines = parsedText.split('\r\n');
+                lines.forEach(line => {
+                    const parts = line.split(' ');
+                    if (parts.length === 2 && !isNaN(parseInt(parts[1]))) {
+                        processedResults.push({ name: parts[0].toUpperCase(), quantity: parseInt(parts[1]) });
+                    }
+                });
+            }
+            return processedResults;
+
+        } catch (error) {
+            console.error('Error calling OCR API:', error);
+            return [];
+        }
     }
 
     // Event Listeners
@@ -411,18 +438,25 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const ocrResults = await simulateOcr();
+        for (const file of uploadedFiles) {
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const base64Image = e.target.result;
+                const ocrResults = await ocrSpace(base64Image);
 
-        ocrResults.forEach(result => {
-            const item = allItems.find(i => i.name.toUpperCase() === result.name.toUpperCase());
-            if (item) {
-                cart[item.name] = { ...item, quantity: result.quantity };
-            }
-        });
+                ocrResults.forEach(result => {
+                    const item = allItems.find(i => i.name.toUpperCase() === result.name.toUpperCase());
+                    if (item) {
+                        cart[item.name] = { ...item, quantity: result.quantity };
+                    }
+                });
 
-        displayItems(allItems);
-        updateBill();
-        updateSelectedItemsDisplay();
+                displayItems(allItems);
+                updateBill();
+                updateSelectedItemsDisplay();
+            };
+            reader.readAsDataURL(file);
+        }
     });
 
     fetchAndParseYamlFiles();
