@@ -412,3 +412,28 @@ td input[type="number"]::-webkit-outer-spin-button {
     border-top: 2px solid #4CAF50;
     padding-top: 15px;
 }
+
+#image-upload-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+#image-preview-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 8px;
+    min-height: 110px;
+}
+
+.img-preview {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #4CAF50;
+}
