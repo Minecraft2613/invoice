@@ -325,36 +325,94 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Use regex to extract material name and quantity
                 // More robust regex to find material name and quantity independently
-                const lines = parsedText.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+                async function processImageWithGemini(fullDataUrl) {
+        // WARNING: Embedding API keys directly in client-side code is INSECURE.
+        // For production, use a secure backend proxy to call Gemini API.
+        console.log("Calling Cloudflare Worker (Gemini Proxy)...");
+        // IMPORTANT: Replace this with your actual Cloudflare Worker URL after deployment.
+        const CLOUDFLARE_WORKER_URL = 'https://invoice.1987sakshamsingh.workers.dev/';
 
-                let lastMaterialName = null;
+        // Extract mime_type and base64 data from fullDataUrl
+        const [mimeTypePart, base64Data] = fullDataUrl.split(';base64,');
+        const mimeType = mimeTypePart.split(':')[1];
 
-                for (const line of lines) {
-                    // Try to match line with a known material name
-                    // This will be very broad and might match partial names
-                    const matchedItem = allItems.find(item =>
-                        line.toUpperCase().includes(item.name.replace(/_/g, " ").toUpperCase()) ||
-                        item.name.replace(/_/g, " ").toUpperCase().includes(line.toUpperCase())
-                    );
+        const prompt = `Analyze this image and extract any Minecraft-like material names and their associated quantities. Provide the output as a JSON array of objects, where each object has 'name' (string) and 'quantity' (number) properties. If a quantity is not explicitly stated for a material, assume 1. If no materials are found, return an empty array. Example: [{ "name": "Stone", "quantity": 64 }, { "name": "Wood Planks", "quantity": 12 }].`;
 
-                    if (matchedItem) {
-                        lastMaterialName = matchedItem.name;
-                    } else {
-                        // Try to parse line as a quantity
-                        const quantity = parseInt(line);
-                        if (!isNaN(quantity) && lastMaterialName !== null) {
-                            // If a quantity is found and a material name was recently identified
-                            processedResults.push({ name: lastMaterialName, quantity: quantity });
-                            lastMaterialName = null; // Reset for the next pair
+        const requestBody = {
+            contents: [
+                {
+                    parts: [
+                        { text: prompt },
+                        {
+                            inline_data: {
+                                mime_type: mimeType,
+                                data: base64Data
+                            }
+                        }
+                    ]
+                }
+            ]
+        };
+
+        try {
+            const response = await fetch(CLOUDFLARE_WORKER_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Gemini API Error Response:", errorData);
+                throw new Error(`Gemini API request failed with status ${response.status}: ${errorData.error.message || 'Unknown error'}`);
+            }
+
+            const data = await response.json();
+            console.log("Gemini API Raw Response:", data);
+
+            let geminiExtractedResults = [];
+            if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0) {
+                const geminiText = data.candidates[0].content.parts[0].text;
+                console.log("Gemini Extracted Text:", geminiText);
+
+                // Attempt to parse the text as JSON
+                try {
+                    geminiExtractedResults = JSON.parse(geminiText);
+                    if (!Array.isArray(geminiExtractedResults)) {
+                        console.warn("Gemini did not return a JSON array. Attempting to recover.");
+                        geminiExtractedResults = []; // Reset if not an array
+                    }
+                } catch (jsonError) {
+                    console.error("Failed to parse Gemini response as JSON:", jsonError);
+                    console.log("Gemini response was not valid JSON. Attempting to extract from raw text.");
+                    // Fallback: If Gemini doesn't return valid JSON, try to parse it heuristically
+                    // This is a very basic fallback and might not be accurate
+                    const lines = geminiText.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+                    for (const line of lines) {
+                        const match = line.match(/(.+?):\s*(\d+)/); // Basic "Name: Quantity" pattern
+                        if (match) {
+                            geminiExtractedResults.push({ name: match[1].trim(), quantity: parseInt(match[2]) });
                         }
                     }
                 }
             }
-            console.log("Processed Results:", processedResults);
-            return processedResults;
+
+            const finalProcessedResults = [];
+            for (const result of geminiExtractedResults) {
+                const ocrMaterialName = result.name.replace(/_/g, " "); // Handle underscores
+                const item = allItems.find(i => i.name.toUpperCase() === ocrMaterialName.toUpperCase());
+                if (item) {
+                    finalProcessedResults.push({ name: item.name, quantity: result.quantity || 1 }); // Use item.name for consistency
+                }
+            }
+
+            console.log("Final Processed Results (after filtering):", finalProcessedResults);
+            return finalProcessedResults;
 
         } catch (error) {
-            console.error('Error calling OCR API:', error);
+            console.error('Error calling Gemini API:', error);
             return [];
         }
     }
@@ -471,7 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 reader.onload = async (e) => {
                     const fullDataUrl = e.target.result;
                     console.log("Full Data URL:", fullDataUrl);
-                    const ocrResults = await ocrSpace(fullDataUrl);
+                    const ocrResults = await processImageWithGemini(fullDataUrl);
 
                     ocrResults.forEach(result => {
                         const ocrMaterialName = result.name.replace(/_/g, " "); // Replace underscores with spaces for matching
