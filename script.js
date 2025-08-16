@@ -371,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const finalProcessedResults = [];
             for (const result of geminiExtractedResults) {
-                const ocrMaterialName = result.name.replace(/ /g, "_"); // Handle spaces
+                const ocrMaterialName = result.name; // Gemini is now returning the correct format
                 const item = allItems.find(i => i.name.toUpperCase() === ocrMaterialName.toUpperCase());
                 if (item) {
                     finalProcessedResults.push({ name: item.name, quantity: result.quantity || 1 }); // Use item.name for consistency
@@ -502,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const ocrResults = await processImageWithGemini(fullDataUrl);
 
                     ocrResults.forEach(result => {
-                        const ocrMaterialName = result.name.replace(/_/g, " "); // Replace underscores with spaces for matching
+                        const ocrMaterialName = result.name; // Use the name directly from Gemini, which is now in the correct format
                         const item = allItems.find(i => i.name.toUpperCase() === ocrMaterialName.toUpperCase());
                         if (item) {
                             cart[item.name] = { ...item, quantity: result.quantity };
