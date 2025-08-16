@@ -318,13 +318,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("API Error:", data.ErrorMessage);
             }
             
-            const processedResults = [];
+                        const processedResults = [];
             if (data.ParsedResults && data.ParsedResults.length > 0) {
                 const parsedText = data.ParsedResults[0].ParsedText;
                 console.log("Parsed Text:", parsedText);
                 const lines = parsedText.split(/\r?\n/).map(l => l.trim()).filter(l => l);
 
-                let processedResults = [];
+                // Removed 'let' here to use the outer processedResults variable
+                // let processedResults = [];
                 let i = 0;
                 while (i < lines.length) {
                     if (lines[i].includes("MATERIAL NAME")) {
