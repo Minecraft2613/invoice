@@ -323,12 +323,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 const parsedText = data.ParsedResults[0].ParsedText;
                 console.log("Parsed Text:", parsedText);
                 const lines = parsedText.split('\r\n');
-                lines.forEach(line => {
-                    const parts = line.split(' ');
-                    if (parts.length === 2 && !isNaN(parseInt(parts[1]))) {
-                        processedResults.push({ name: parts[0].toUpperCase(), quantity: parseInt(parts[1]) });
+                let materialName = null;
+                let quantity = null;
+
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].includes("MATERIAL NAME")) {
+                        materialName = lines[i+1];
                     }
-                });
+                    if (lines[i].includes("QUANTITY")) {
+                        quantity = lines[i+1];
+                    }
+                }
+
+                if (materialName && quantity) {
+                    processedResults.push({ name: materialName.toUpperCase(), quantity: parseInt(quantity) });
+                }
             }
             console.log("Processed Results:", processedResults);
             return processedResults;
