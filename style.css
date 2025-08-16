@@ -106,8 +106,20 @@ input:checked + .slider:before {
 
 #item-search:focus {
     outline: none;
-    border-color: black;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+    border-color: transparent;
+    box-shadow: none; /* Removed box-shadow from search input */
+}
+
+/* Remove focus outline/border for other inputs and buttons, allow default box-shadow */
+td input[type="number"]:focus,
+.tax-row input:focus,
+.btn:focus,
+.invoice-buttons button:focus,
+#manual-mode-button:focus,
+#upload-mode-button:focus,
+#back-button:focus {
+    outline: none;
+    border-color: transparent; /* Added for consistency */
 }
 
 /* Table Wrapper */

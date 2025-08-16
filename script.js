@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageUpload = document.getElementById('image-upload');
     const imagePreviewContainer = document.getElementById('image-preview-container');
     const backButton = document.getElementById('back-button'); // New back button
+    console.log('backButton element:', backButton); // Debugging line
 
     // New DOM elements for mode selection
     const modeSelectionContainer = document.getElementById('mode-selection-container');
