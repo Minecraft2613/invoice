@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // This is included for demonstration purposes only, as requested.
 
         console.log("Calling OCR.space API...");
-        const apiKey = 'K85010646488957'; // Replace with your actual OCR.space API key
+        const apiKey = 'K82647048388957'; // Replace with your actual OCR.space API key
         const apiUrl = 'https://api.ocr.space/parse/image';
 
         const formData = new FormData();
