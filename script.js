@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify(requestBody),
             });
 
             if (!response.ok) {
@@ -340,25 +340,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const geminiText = data.candidates[0].content.parts[0].text;
                 console.log("Gemini Extracted Text:", geminiText);
 
-                // Attempt to parse the text as JSON
-                try {
-                    geminiExtractedResults = JSON.parse(geminiText);
-                    if (!Array.isArray(geminiExtractedResults)) {
-                        console.warn("Gemini did not return a JSON array. Attempting to recover.");
-                        geminiExtractedResults = []; // Reset if not an array
-                    }
-                } catch (jsonError) {
-                    console.error("Failed to parse Gemini response as JSON:", jsonError);
-                    console.log("Gemini response was not valid JSON. Attempting to extract from raw text.");
-                    // Fallback: If Gemini doesn't return valid JSON, try to parse it heuristically
-                    // This is a very basic fallback and might not be accurate
-                                    const geminiText = data.candidates[0].content.parts[0].text;
-                console.log("Gemini Extracted Text:", geminiText);
-
                 // Remove markdown code block delimiters if present
-                const cleanedGeminiText = geminiText.replace(/^```json
-/, '').replace(/
-```$/, '');
+                const cleanedGeminiText = geminiText.replace(/^```json\n/, '').replace(/\n```$/, '');
 
                 // Attempt to parse the text as JSON
                 try {
@@ -373,14 +356,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Fallback: If Gemini doesn't return valid JSON, try to parse it heuristically
                     // This is a very basic fallback and might not be accurate
                     const lines = cleanedGeminiText.split(/\r?\n/).map(l => l.trim()).filter(l => l);
-                    for (const line of lines) {
-                        const match = line.match(/(.+?):\s*(\d+)/); // Basic "Name: Quantity" pattern
-                        if (match) {
-                            geminiExtractedResults.push({ name: match[1].trim(), quantity: parseInt(match[2]) });
-                        }
-                    }
-                }
-
                     for (const line of lines) {
                         const match = line.match(/(.+?):\s*(\d+)/); // Basic "Name: Quantity" pattern
                         if (match) {
