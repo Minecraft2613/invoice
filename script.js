@@ -322,8 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.ParsedResults && data.ParsedResults.length > 0) {
                 const parsedText = data.ParsedResults[0].ParsedText;
                 console.log("Parsed Text:", parsedText);
-                const lines = parsedText.split(/?
-/).map(l => l.trim()).filter(l => l);
+                const lines = parsedText.split(/\r?\n/).map(l => l.trim()).filter(l => l);
                 let i = 0;
                 while (i < lines.length) {
                     if (lines[i].includes("MATERIAL NAME")) {
