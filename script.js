@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
             row.dataset.itemName = item.name;
 
             const materialCell = row.insertCell();
-            materialCell.textContent = item.name;
+            materialCell.textContent = formatMaterialName(item.name); // Use helper function for display
 
             const quantityCell = row.insertCell();
             const quantityInput = document.createElement('input');
