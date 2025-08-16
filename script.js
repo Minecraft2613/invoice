@@ -316,6 +316,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.IsErroredOnProcessing) {
                 console.error("API Error:", data.ErrorMessage);
             }
+            if (data.IsErroredOnProcessing) {
+                console.error("API Error:", data.ErrorMessage);
+            }
             
             // Process the data to extract the item names and quantities
             // This is a simplified example and may need to be adjusted based on the actual OCR results
