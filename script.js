@@ -326,17 +326,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 let materialName = null;
                 let quantity = null;
 
-                for (let i = 0; i < lines.length; i++) {
-                    if (lines[i].includes("MATERIAL NAME")) {
-                        materialName = lines[i+1];
-                    }
-                    if (lines[i].includes("QUANTITY")) {
-                        quantity = lines[i+1];
-                    }
+                const materialNameIndex = lines.findIndex(line => line.includes("MATERIAL NAME"));
+                if (materialNameIndex !== -1 && lines.length > materialNameIndex + 1) {
+                    materialName = lines[materialNameIndex + 1];
+                }
+
+                const quantityIndex = lines.findIndex(line => line.includes("QUANTITY"));
+                if (quantityIndex !== -1 && lines.length > quantityIndex + 1) {
+                    quantity = lines[quantityIndex + 1];
                 }
 
                 if (materialName && quantity) {
-                    processedResults.push({ name: materialName.toUpperCase(), quantity: parseInt(quantity) });
+                    processedResults.push({ name: materialName.trim().toUpperCase(), quantity: parseInt(quantity.trim()) });
                 }
             }
             console.log("Processed Results:", processedResults);
