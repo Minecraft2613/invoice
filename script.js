@@ -322,22 +322,36 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.ParsedResults && data.ParsedResults.length > 0) {
                 const parsedText = data.ParsedResults[0].ParsedText;
                 console.log("Parsed Text:", parsedText);
-                const lines = parsedText.split('\r\n');
-                let materialName = null;
-                let quantity = null;
+                const lines = parsedText.split(/\r?\n/).map(l => l.trim()).filter(l => l);
 
-                const materialNameIndex = lines.findIndex(line => line.includes("MATERIAL NAME"));
-                if (materialNameIndex !== -1 && lines.length > materialNameIndex + 1) {
-                    materialName = lines[materialNameIndex + 1];
-                }
-
-                const quantityIndex = lines.findIndex(line => line.includes("QUANTITY"));
-                if (quantityIndex !== -1 && lines.length > quantityIndex + 1) {
-                    quantity = lines[quantityIndex + 1];
-                }
-
-                if (materialName && quantity) {
-                    processedResults.push({ name: materialName.trim().toUpperCase(), quantity: parseInt(quantity.trim()) });
+                let processedResults = [];
+                let i = 0;
+                while (i < lines.length) {
+                    if (lines[i].includes("MATERIAL NAME")) {
+                        // Found "MATERIAL NAME", the next line should be the actual material
+                        if (i + 1 < lines.length) {
+                            const name = lines[i + 1].toUpperCase();
+                            // Now look for "QUANTITY" after the material name
+                            let j = i + 2;
+                            while (j < lines.length && !lines[j].includes("QUANTITY")) {
+                                j++;
+                            }
+                            if (j < lines.length && lines[j].includes("QUANTITY")) {
+                                // Found "QUANTITY", the next line should be the actual quantity
+                                if (j + 1 < lines.length) {
+                                    const qty = parseInt(lines[j + 1]);
+                                    if (!isNaN(qty)) {
+                                        processedResults.push({ name, quantity: qty });
+                                    }
+                                }
+                            }
+                            i = j + 2; // Move past the quantity line
+                        } else {
+                            i++; // No material name after header, just move on
+                        }
+                    } else {
+                        i++; // Not a header we care about, move to next line
+                    }
                 }
             }
             console.log("Processed Results:", processedResults);
