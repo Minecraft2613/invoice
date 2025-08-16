@@ -293,16 +293,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // IMPORTANT: Storing API keys in client-side code is not secure and should be avoided in production applications.
         // This is included for demonstration purposes only, as requested.
 
-        // UNCOMMENT THE FOLLOWING BLOCK TO USE THE REAL OCR.SPACE API
-        /*
         console.log("Calling OCR.space API...");
         const apiKey = 'K85010646488957'; // Replace with your actual OCR.space API key
         const apiUrl = 'https://api.ocr.space/parse/image';
 
         const formData = new FormData();
-        formData.append('base64Image', imageData);
+        formData.append('base64Image', `data:image/jpeg;base64,${imageData}`);
         formData.append('apikey', apiKey);
         formData.append('language', 'eng');
+        formData.append('filetype', 'JPG');
 
         try {
             const response = await fetch(apiUrl, {
@@ -339,14 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error calling OCR API:', error);
             return [];
         }
-        */
-
-        // MOCK OCR RESULTS FOR LOCAL TESTING
-        console.log("Mock OCR running...");
-        return [
-            { name: "STONE", quantity: 10 },
-            { name: "DIAMOND", quantity: 5 }
-        ];
     }
 
     // Event Listeners
