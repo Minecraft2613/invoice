@@ -288,44 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
         previewModal.style.display = 'flex';
     }
 
-    // OCR function
-    async function ocrSpace(fullDataUrl) {
-        // IMPORTANT: Storing API keys in client-side code is not secure and should be avoided in production applications.
-        // This is included for demonstration purposes only, as requested.
-
-        console.log("Calling OCR.space API...");
-        const apiKey = 'K85010646488957'; // Replace with your actual OCR.space API key
-        const apiUrl = 'https://api.ocr.space/parse/image';
-
-        const formData = new FormData();
-        formData.append('base64Image', fullDataUrl);
-        formData.append('apikey', apiKey);
-        formData.append('language', 'eng');
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error(`OCR API request failed with status ${response.status}`);
-            }
-
-            const data = await response.json();
-            console.log("API Response:", data);
-            if (data.IsErroredOnProcessing) {
-                console.error("API Error:", data.ErrorMessage);
-            }
-            
-                        const processedResults = [];
-            if (data.ParsedResults && data.ParsedResults.length > 0) {
-                const parsedText = data.ParsedResults[0].ParsedText;
-                console.log("Parsed Text:", parsedText);
-
-                // Use regex to extract material name and quantity
-                // More robust regex to find material name and quantity independently
-                async function processImageWithGemini(fullDataUrl) {
+    async function processImageWithGemini(fullDataUrl) {
         // WARNING: Embedding API keys directly in client-side code is INSECURE.
         // For production, use a secure backend proxy to call Gemini API.
         console.log("Calling Cloudflare Worker (Gemini Proxy)...");
