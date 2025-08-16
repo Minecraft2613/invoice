@@ -507,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const ocrResults = await processImageWithGemini(fullDataUrl);
 
                     ocrResults.forEach(result => {
-                        const ocrMaterialName = result.name; // Use the name directly from Gemini, which is now in the correct format
+                        const ocrMaterialName = result.name.toUpperCase().replace(/ /g, "_"); // Normalize to match YAML format
                         const item = allItems.find(i => i.name.toUpperCase() === ocrMaterialName.toUpperCase());
                         if (item) {
                             cart[item.name] = { ...item, quantity: result.quantity };
