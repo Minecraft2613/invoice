@@ -306,42 +306,97 @@ document.addEventListener('DOMContentLoaded', () => {
 
     previewButton.addEventListener('click', previewInvoice);
 
-downloadButton.addEventListener('click', () => {
-    // Make sure invoice is up-to-date
-    previewInvoice();
+    downloadButton.addEventListener('click', () => {
+        const tempDiv = document.createElement('div');
+        tempDiv.style.position = 'absolute';
+        tempDiv.style.left = '-9999px';
+        tempDiv.style.top = '-9999px';
+        document.body.appendChild(tempDiv);
 
-    // Wait a bit for rendering
-    setTimeout(() => {
-        // Target the element that contains the *entire* invoice
-        // Replace '#invoicePreview' if your container has a different ID
-        const invoiceContent = document.querySelector('#invoicePreview');
+        let downloadContent = `
+            <div class="download-invoice-container">
+                <h1 style="text-align: center;">${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Material Name</th>
+                            <th>Quantity</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
 
-        if (!invoiceContent) {
-            console.error("Invoice content not found.");
-            return;
+        let currentSubtotal = 0;
+        const isBuying = buySellToggle.checked;
+
+        for (const itemName in cart) {
+            const item = cart[itemName];
+            const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
+            const itemCost = price * item.quantity;
+            currentSubtotal += itemCost;
+            downloadContent += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>${itemCost.toFixed(2)}</td>
+                    </tr>
+                `;
         }
 
-        // Capture the full scroll height/width of the invoice
-        html2canvas(invoiceContent, {
+        if (Object.keys(cart).length === 0) {
+            downloadContent += `<tr><td colspan="3" style="text-align: center;">No items in cart.</td></tr>`;
+        }
+
+        downloadContent += `
+                    </tbody>
+                </table>
+                <div class="summary">
+                    <div class="tax-row">
+                        <span>Subtotal:</span>
+                        <span>${currentSubtotal.toFixed(2)}</span>
+                    </div>
+            `;
+
+        const gstRate = parseFloat(gstInput.value) || 0;
+        const gstAmount = currentSubtotal * (gstRate / 100);
+        
+        const taxRate = parseFloat(taxInput.value) || 0;
+        const taxAmount = currentSubtotal * (taxRate / 100);
+        
+        const totalAmount = currentSubtotal + gstAmount + taxAmount;
+
+        downloadContent += `
+                    <div class="tax-row">
+                        <span>GST (${gstRate}%):</span>
+                        <span>${gstAmount.toFixed(2)}</span>
+                    </div>
+                    <div class="tax-row">
+                        <span>Tax (${taxRate}%):</span>
+                        <span>${taxAmount.toFixed(2)}</span>
+                    </div>
+                    <div class="total-row">
+                        <strong>Total Amount:</strong>
+                        <span>${totalAmount.toFixed(2)}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        tempDiv.innerHTML = downloadContent;
+
+        html2canvas(tempDiv, {
             scale: 2,
-            backgroundColor: null, // keep dark theme
-            useCORS: true,
-            windowWidth: invoiceContent.scrollWidth,
-            windowHeight: invoiceContent.scrollHeight
+            backgroundColor: '#ffffff'
         }).then(canvas => {
-            // Download the PNG
             const link = document.createElement('a');
             link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
-        }).catch(err => {
-            console.error("Error capturing invoice:", err);
         }).finally(() => {
-            // Close the modal after capture
-            previewModal.style.display = 'none';
+            document.body.removeChild(tempDiv);
         });
-    }, 300);
-});
+    });
 
     closeModalButton.addEventListener('click', () => {
         previewModal.style.display = 'none';
@@ -354,4 +409,76 @@ downloadButton.addEventListener('click', () => {
     });
 
     fetchAndParseYamlFiles();
+
+    const uploadButton = document.getElementById('upload-button');
+    const imageUpload = document.getElementById('image-upload');
+
+    uploadButton.addEventListener('click', () => {
+        imageUpload.click();
+    });
+
+    imageUpload.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageData = e.target.result;
+                analyzeImage(imageData);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    async function analyzeImage(imageData) {
+        const apiKey = 'K89838435388957'; // Free OCR API key
+        const url = 'https://api.ocr.space/parse/image';
+
+        const formData = new FormData();
+        formData.append('base64Image', imageData);
+        formData.append('apikey', apiKey);
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            if (result.OCRExitCode === 1) {
+                const extractedText = result.ParsedResults[0].ParsedText;
+                parseAndFillCart(extractedText);
+            } else {
+                alert('Error processing image. Please try again.');
+                console.error('OCR Error:', result);
+            }
+        } catch (error) {
+            console.error('Error sending image for analysis:', error);
+            alert('Error sending image for analysis. Please check the console for details.');
+        }
+    }
+
+    function parseAndFillCart(text) {
+        const lines = text.split('\n');
+        lines.forEach(line => {
+            const parts = line.split(/\s+/);
+            if (parts.length >= 2) {
+                const itemName = parts.slice(0, -1).join(' ');
+                const quantity = parseInt(parts[parts.length - 1]);
+
+                if (itemName && !isNaN(quantity)) {
+                    const item = allItems.find(i => i.name.toLowerCase() === itemName.toLowerCase());
+                    if (item) {
+                        cart[item.name] = { ...item, quantity: quantity };
+                    }
+                }
+            }
+        });
+        updateBill();
+        updateSelectedItemsDisplay();
+        // Refresh the displayed items to show the updated cart quantities
+        const searchInput = document.getElementById('item-search');
+        const query = searchInput.value.toLowerCase();
+        const filteredItems = allItems.filter(item => item.name.toLowerCase().includes(query));
+        displayItems(filteredItems);
+    }
 });

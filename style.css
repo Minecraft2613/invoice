@@ -24,7 +24,7 @@ body {
     animation: fadeIn 0.5s ease-out;
 }
 
-@keyframes fadeIn {
+ @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
 }
@@ -86,75 +86,61 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-/* Search Section */
 .search-section {
-    padding: 10px;
-    background-color: #2b2b2b;
+    width: 100%;
+    margin-top: 10px;
 }
 
 #item-search {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
-    border: 2px solid black;
+    border: 1px solid #444;
     background-color: #333;
     color: #f0f0f0;
     font-size: 1rem;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
     transition: border-color 0.3s;
 }
-
 #item-search:focus {
     outline: none;
-    border-color: black;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+    border-color: #4CAF50;
 }
 
-/* Table Wrapper */
+#upload-button {
+    margin-left: 10px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#upload-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
 .table-wrapper {
-    border: 2px solid black;
-    border-radius: 6px;
-    background-color: #2b2b2b;
+    overflow-x: auto;
 }
 
-/* Table Header */
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
+    table-layout: fixed; /* Crucial: Ensures columns respect defined widths */
 }
 
-thead th {
-    background-color: #3b3b3b;
-    font-weight: 600;
-    color: #999;
-    text-transform: uppercase;
-    position: sticky;
-    top: 0;
-    z-index: 2;
-}
+/* Apply specific widths to headers */
+thead th:nth-child(1) { width: auto; /* Material Name will take remaining space */ }
+thead th:nth-child(2) { width: 120px; /* Quantity column */ }
+thead th:nth-child(3) { width: 120px; /* Cost column */ }
+thead th:nth-child(4) { width: 100px; /* Action column */ }
 
-/* Column Widths */
-thead th:nth-child(1),
-tbody td:nth-child(1) { width: auto; }
-thead th:nth-child(2),
-tbody td:nth-child(2) { width: 120px; }
-thead th:nth-child(3),
-tbody td:nth-child(3) { width: 120px; }
-thead th:nth-child(4),
-tbody td:nth-child(4) { width: 100px; }
-
-/* Scrollable Rows */
-.table-body-scroll {
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.table-body-scroll table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
 
 th, td {
     padding: 15px;
@@ -162,13 +148,39 @@ th, td {
     border-bottom: 1px solid #444;
 }
 
+th {
+    background-color: #3b3b3b;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+}
+
 tr:hover {
     background-color: #333;
 }
 
-/* Number Inputs */
+tbody#item-list {
+    display: block; /* Keep display block for overflow-y */
+    max-height: 300px; /* Adjust height as needed */
+    overflow-y: auto;
+}
+
+tbody#item-list tr {
+    /* Ensure the table rows are displayed as table rows within the block tbody */
+    display: table; /* This makes the tr behave like a table */
+    width: 100%; /* And stretch to full width */
+    table-layout: fixed; /* Apply fixed layout to inner rows too for consistent cell sizing */
+}
+
+/* Apply specific widths to cells within the tbody rows to match headers */
+tbody#item-list td:nth-child(1) { width: auto; } /* Material Name */
+tbody#item-list td:nth-child(2) { width: 120px; } /* Quantity */
+tbody#item-list td:nth-child(3) { width: 120px; } /* Cost */
+tbody#item-list td:nth-child(4) { width: 100px; } /* Action */
+
+
 td input[type="number"] {
-    width: 80px;
+    width: 80px; /* This width is for the input field itself, not the cell */
     padding: 8px;
     background-color: #444;
     border: 1px solid #555;
@@ -183,7 +195,7 @@ td input[type="number"]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-/* Selected Items */
+/* Styles for the new selected items display */
 #selected-items-display {
     background-color: #2b2b2b;
     border-radius: 8px;
@@ -202,7 +214,7 @@ td input[type="number"]::-webkit-outer-spin-button {
 .selected-items-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
+    table-layout: fixed; /* Also crucial for the selected items table */
 }
 
 .selected-items-table th,
@@ -224,7 +236,6 @@ td input[type="number"]::-webkit-outer-spin-button {
     background-color: #333;
 }
 
-/* Summary */
 .summary {
     display: flex;
     flex-direction: column;
@@ -261,7 +272,6 @@ td input[type="number"]::-webkit-outer-spin-button {
     padding-top: 15px;
 }
 
-/* Buttons */
 .invoice-buttons {
     display: flex;
     gap: 15px;
@@ -296,7 +306,7 @@ td input[type="number"]::-webkit-outer-spin-button {
     transform: translateY(-2px);
 }
 
-/* Modal */
+/* Modal for Preview */
 .modal {
     display: none;
     position: fixed;
@@ -333,4 +343,72 @@ td input[type="number"]::-webkit-outer-spin-button {
 .close-button:focus {
     color: #fff;
     text-decoration: none;
+}
+
+/* Styles for the downloaded invoice image */
+.download-invoice-container {
+    background-color: #ffffff; /* White background for download */
+    color: #000000; /* Black text for download */
+    padding: 30px;
+    border-radius: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    width: 800px; /* Fixed width for consistency */
+    box-sizing: border-box;
+}
+
+.download-invoice-container h1 {
+    color: #4CAF50;
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-shadow: none; /* Remove text shadow for print */
+    margin-bottom: 20px;
+}
+
+.download-invoice-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: fixed; /* Essential for downloaded image table as well */
+}
+
+.download-invoice-container th,
+.download-invoice-container td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* Lighter border for print */
+}
+
+.download-invoice-container th {
+    background-color: #3b3b3b; /* Dark background for download headers*/
+    font-weight: 600;
+    color: #f0f0f0; /* Light text for download headers*/
+    text-transform: uppercase;
+}
+
+.download-invoice-container tr:hover {
+    background-color: #f9f9f9; /* Lighter hover effect */
+}
+
+.download-invoice-container .summary {
+    background-color: #f2f2f2; /* Lighter summary background */
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.download-invoice-container .tax-row,
+.download-invoice-container .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.download-invoice-container .total-row {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #4CAF50;
+    border-top: 2px solid #4CAF50;
+    padding-top: 15px;
 }
