@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function ocrSpace(imageData) {
         // IMPORTANT: Storing API keys in client-side code is not secure and should be avoided in production applications.
         // This is included for demonstration purposes only, as requested.
-        const apiKey = 'K85010646488957'; // Replace with your actual OCR.space API key
+                const apiKey = 'K85010646488957'; // Replace with your actual OCR.space API key
         const apiUrl = 'https://api.ocr.space/parse/image';
 
         const formData = new FormData();
@@ -441,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const file of uploadedFiles) {
             const reader = new FileReader();
             reader.onload = async (e) => {
-                const base64Image = e.target.result;
+                const base64Image = e.target.result.split(',')[1];
                 const ocrResults = await ocrSpace(base64Image);
 
                 ocrResults.forEach(result => {
