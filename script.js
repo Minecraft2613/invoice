@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const makeListButton = document.getElementById('make-list-button');
     const imageUpload = document.getElementById('image-upload');
     const imagePreviewContainer = document.getElementById('image-preview-container');
+    const backButton = document.getElementById('back-button'); // New back button
 
     // New DOM elements for mode selection
     const modeSelectionContainer = document.getElementById('mode-selection-container');
@@ -400,6 +401,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Function to go back to mode selection
+    function goBackToModeSelection() {
+        mainAppContainer.style.display = 'none';
+        modeSelectionContainer.style.display = 'flex'; // Show mode selection
+
+        // Reset state
+        cart = {};
+        searchInput.value = '';
+        itemListTableBody.innerHTML = '';
+        subtotalSpan.textContent = '0.00';
+        gstAmountSpan.textContent = '0.00';
+        taxAmountSpan.textContent = '0.00';
+        totalAmountSpan.textContent = '0.00';
+        imagePreviewContainer.innerHTML = '';
+        uploadedFiles = [];
+        makeListButton.disabled = true; // Disable makeListButton again
+        invoiceTitleDisplay.textContent = 'Buying Invoice'; // Reset title
+        buySellToggle.checked = true; // Reset toggle
+    }
+
     // Mode switching functions
     function showManualMode() {
         console.log('Manual mode selected');
@@ -420,6 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listeners for mode selection buttons
     manualModeButton.addEventListener('click', showManualMode);
     uploadModeButton.addEventListener('click', showUploadMode);
+    backButton.addEventListener('click', goBackToModeSelection); // New back button event listener
 
     // Event Listeners
     searchInput.addEventListener('input', (event) => {

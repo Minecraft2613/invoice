@@ -27,6 +27,7 @@
     <div id="main-app-container" style="display: none;">
         <div class="invoice-container">
         <div class="header">
+            <button id="back-button" class="btn btn-secondary btn-sm" style="margin-right: 10px;">Back</button>
             <h1 id="invoice-title">Buying Invoice</h1>
             <label class="toggle-switch">
                 <input type="checkbox" id="buySellToggle" checked>
@@ -35,16 +36,16 @@
         </div>
 
         <div class="table-wrapper">
+            <div id="image-upload-section">
+                <div id="image-preview-container"></div>
+                <input type="file" id="image-upload" accept="image/*" multiple style="display: none;">
+                <button id="upload-images-button" class="btn btn-secondary">Upload Images</button>
+                <button id="make-list-button" class="btn btn-primary">Make List</button>
+            </div>
+
             <!-- Search bar -->
             <div class="search-section">
             <input type="text" id="item-search" placeholder="Search blocks...">
-        </div>
-
-        <div id="image-upload-section">
-            <div id="image-preview-container"></div>
-            <input type="file" id="image-upload" accept="image/*" multiple style="display: none;">
-            <button id="upload-images-button" class="btn btn-secondary">Upload Images</button>
-            <button id="make-list-button" class="btn btn-primary">Make List</button>
         </div>
 
             <!-- Table header -->
