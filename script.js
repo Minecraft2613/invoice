@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // OCR function
-    async function ocrSpace(imageData) {
+    async function ocrSpace(fullDataUrl) {
         // IMPORTANT: Storing API keys in client-side code is not secure and should be avoided in production applications.
         // This is included for demonstration purposes only, as requested.
 
@@ -298,10 +298,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const apiUrl = 'https://api.ocr.space/parse/image';
 
         const formData = new FormData();
-        formData.append('base64Image', `data:image/jpeg;base64,${imageData}`);
+        formData.append('base64Image', fullDataUrl);
         formData.append('apikey', apiKey);
         formData.append('language', 'eng');
-        formData.append('filetype', 'JPG');
 
         try {
             const response = await fetch(apiUrl, {
@@ -450,8 +449,9 @@ document.addEventListener('DOMContentLoaded', () => {
             for (const file of uploadedFiles) {
                 const reader = new FileReader();
                 reader.onload = async (e) => {
-                    const base64Image = e.target.result.split(',')[1];
-                    const ocrResults = await ocrSpace(base64Image);
+                    const fullDataUrl = e.target.result;
+                    console.log("Full Data URL:", fullDataUrl);
+                    const ocrResults = await ocrSpace(fullDataUrl);
 
                     ocrResults.forEach(result => {
                         const item = allItems.find(i => i.name.toUpperCase() === result.name.toUpperCase());
