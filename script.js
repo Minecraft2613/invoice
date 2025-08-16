@@ -325,18 +325,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Use regex to extract material name and quantity
                 // More robust regex to find material name and quantity independently
-                const materialRegex = /MATERIAL NAME\s+([A-Z0-9_\s]+?)(?:\s*Subtotal:|\s*GST|\s*Tax|\s*Total Amount|\s*QUANTITY|\s*COST|$)/i;
-                const quantityRegex = /QUANTITY\s+(\d+)/i;
+                const lines = parsedText.split(/\r?\n/).map(l => l.trim()).filter(l => l);
 
-                const materialMatch = parsedText.match(materialRegex);
-                const quantityMatch = parsedText.match(quantityRegex);
+                let lastMaterialName = null;
 
-                if (materialMatch && quantityMatch) {
-                    const name = materialMatch[1].trim().toUpperCase();
-                    const quantity = parseInt(quantityMatch[1]);
+                for (const line of lines) {
+                    // Try to match line with a known material name
+                    // This will be very broad and might match partial names
+                    const matchedItem = allItems.find(item =>
+                        line.toUpperCase().includes(item.name.replace(/_/g, " ").toUpperCase()) ||
+                        item.name.replace(/_/g, " ").toUpperCase().includes(line.toUpperCase())
+                    );
 
-                    if (!isNaN(quantity)) {
-                        processedResults.push({ name, quantity: quantity });
+                    if (matchedItem) {
+                        lastMaterialName = matchedItem.name;
+                    } else {
+                        // Try to parse line as a quantity
+                        const quantity = parseInt(line);
+                        if (!isNaN(quantity) && lastMaterialName !== null) {
+                            // If a quantity is found and a material name was recently identified
+                            processedResults.push({ name: lastMaterialName, quantity: quantity });
+                            lastMaterialName = null; // Reset for the next pair
+                        }
                     }
                 }
             }
