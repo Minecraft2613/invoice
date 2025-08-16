@@ -335,22 +335,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 j++;
                             }
                             if (j < lines.length && lines[j].includes("QUANTITY")) {
-                                console.log("Found QUANTITY at line:", j, "Content:", lines[j]);
                                 // Found "QUANTITY", the next line should be the actual quantity
                                 if (j + 1 < lines.length) {
                                     const qty = parseInt(lines[j + 1]);
-                                    console.log("Extracted quantity:", qty);
                                     if (!isNaN(qty)) {
-                                        console.log("Pushing to processedResults:", { name, quantity: qty });
                                         processedResults.push({ name, quantity: qty });
-                                    } else {
-                                        console.log("Quantity is NaN, not pushing.");
                                     }
-                                } else {
-                                    console.log("No line after QUANTITY for value.");
                                 }
-                            } else {
-                                console.log("QUANTITY not found after material name or j out of bounds.");
                             }
                             i = j + 2; // Move past the quantity line
                         } else {
