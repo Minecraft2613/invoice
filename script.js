@@ -290,6 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // OCR function
     async function ocrSpace(imageData) {
+        console.log("Calling OCR.space API...");
         // IMPORTANT: Storing API keys in client-side code is not secure and should be avoided in production applications.
         // This is included for demonstration purposes only, as requested.
                 const apiKey = 'K85010646488957'; // Replace with your actual OCR.space API key
@@ -311,12 +312,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
+            console.log("API Response:", data);
             
             // Process the data to extract the item names and quantities
             // This is a simplified example and may need to be adjusted based on the actual OCR results
             const processedResults = [];
             if (data.ParsedResults && data.ParsedResults.length > 0) {
                 const parsedText = data.ParsedResults[0].ParsedText;
+                console.log("Parsed Text:", parsedText);
                 const lines = parsedText.split('\r\n');
                 lines.forEach(line => {
                     const parts = line.split(' ');
@@ -325,6 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             }
+            console.log("Processed Results:", processedResults);
             return processedResults;
 
         } catch (error) {
