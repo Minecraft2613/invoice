@@ -437,29 +437,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     makeListButton.addEventListener('click', async () => {
+        console.log("Working...");
         if (uploadedFiles.length === 0) {
             alert("Please upload at least one image.");
             return;
         }
 
-        for (const file of uploadedFiles) {
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                const base64Image = e.target.result.split(',')[1];
-                const ocrResults = await ocrSpace(base64Image);
+        try {
+            for (const file of uploadedFiles) {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const base64Image = e.target.result.split(',')[1];
+                    const ocrResults = await ocrSpace(base64Image);
 
-                ocrResults.forEach(result => {
-                    const item = allItems.find(i => i.name.toUpperCase() === result.name.toUpperCase());
-                    if (item) {
-                        cart[item.name] = { ...item, quantity: result.quantity };
-                    }
-                });
+                    ocrResults.forEach(result => {
+                        const item = allItems.find(i => i.name.toUpperCase() === result.name.toUpperCase());
+                        if (item) {
+                            cart[item.name] = { ...item, quantity: result.quantity };
+                        }
+                    });
 
-                displayItems(allItems);
-                updateBill();
-                updateSelectedItemsDisplay();
-            };
-            reader.readAsDataURL(file);
+                    displayItems(allItems);
+                    updateBill();
+                    updateSelectedItemsDisplay();
+                };
+                reader.readAsDataURL(file);
+            }
+        } catch (error) {
+            console.error("Error:", error);
         }
     });
 
