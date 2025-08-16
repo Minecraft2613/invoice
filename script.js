@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // This is included for demonstration purposes only, as requested.
 
         console.log("Calling OCR.space API...");
-        const apiKey = 'K82647048388957'; // Replace with your actual OCR.space API key
+        const apiKey = 'K85010646488957'; // Replace with your actual OCR.space API key
         const apiUrl = 'https://api.ocr.space/parse/image';
 
         const formData = new FormData();
@@ -322,36 +322,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.ParsedResults && data.ParsedResults.length > 0) {
                 const parsedText = data.ParsedResults[0].ParsedText;
                 console.log("Parsed Text:", parsedText);
-                const lines = parsedText.split(/\r?\n/).map(l => l.trim()).filter(l => l);
 
-                // Removed 'let' here to use the outer processedResults variable
-                // let processedResults = [];
-                let i = 0;
-                while (i < lines.length) {
-                    if (lines[i].includes("MATERIAL NAME")) {
-                        // Found "MATERIAL NAME", the next line should be the actual material
-                        if (i + 1 < lines.length) {
-                            const name = lines[i + 1].toUpperCase();
-                            // Now look for "QUANTITY" after the material name
-                            let j = i + 2;
-                            while (j < lines.length && !lines[j].includes("QUANTITY")) {
-                                j++;
-                            }
-                            if (j < lines.length && lines[j].includes("QUANTITY")) {
-                                // Found "QUANTITY", the next line should be the actual quantity
-                                if (j + 1 < lines.length) {
-                                    const qty = parseInt(lines[j + 1]);
-                                    if (!isNaN(qty)) {
-                                        processedResults.push({ name, quantity: qty });
-                                    }
-                                }
-                            }
-                            i = j + 2; // Move past the quantity line
-                        } else {
-                            i++; // No material name after header, just move on
-                        }
-                    } else {
-                        i++; // Not a header we care about, move to next line
+                // Use regex to extract material name and quantity
+                const materialRegex = /MATERIAL NAME\s+([A-Z0-9_\s]+?)(?:Subtotal:|GST|Tax|Total Amount|QUANTITY)/i;
+                const quantityRegex = /QUANTITY\s+(\d+)/i;
+
+                const materialMatch = parsedText.match(materialRegex);
+                const quantityMatch = parsedText.match(quantityRegex);
+
+                if (materialMatch && quantityMatch) {
+                    const name = materialMatch[1].trim().toUpperCase();
+                    const quantity = parseInt(quantityMatch[1]);
+
+                    if (!isNaN(quantity)) {
+                        processedResults.push({ name, quantity: quantity });
                     }
                 }
             }
