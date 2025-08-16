@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Helper function to format material names for display
+    function formatMaterialName(name) {
+        return name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+
     let allItems = []; // Stores combined data from YAML files
     let cart = {}; // Stores items added to the cart with their quantities
     let uploadedFiles = []; // Stores the selected image files
