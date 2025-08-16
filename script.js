@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageUpload = document.getElementById('image-upload');
     const imagePreviewContainer = document.getElementById('image-preview-container');
 
+    // Disable makeListButton initially
+    makeListButton.disabled = true;
 
     // List of YAML files to fetch - Comprehensive list
     const fileList = [
@@ -87,6 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
             allItems.sort((a, b) => a.name.localeCompare(b.name));
             displayItems(allItems);
             updateSelectedItemsDisplay();
+            makeListButton.disabled = false; // Enable the button once allItems is populated
+            console.log('All items data loaded and ready.');
         } catch (error) {
             console.error('Error fetching or parsing YAML files:', error);
             itemListTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading items. Please ensure YAML files are correctly placed and formatted.</td></tr>';
@@ -367,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const finalProcessedResults = [];
             for (const result of geminiExtractedResults) {
-                const ocrMaterialName = result.name.replace(/_/g, " "); // Handle underscores
+                const ocrMaterialName = result.name.replace(/ /g, "_"); // Handle spaces
                 const item = allItems.find(i => i.name.toUpperCase() === ocrMaterialName.toUpperCase());
                 if (item) {
                     finalProcessedResults.push({ name: item.name, quantity: result.quantity || 1 }); // Use item.name for consistency
