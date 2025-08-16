@@ -402,6 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mode switching functions
     function showManualMode() {
+        console.log('Manual mode selected');
         modeSelectionContainer.style.display = 'none';
         mainAppContainer.style.display = 'block';
         imageUploadSection.style.display = 'none';
@@ -409,6 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showUploadMode() {
+        console.log('Upload mode selected');
         modeSelectionContainer.style.display = 'none';
         mainAppContainer.style.display = 'block';
         imageUploadSection.style.display = 'block';
