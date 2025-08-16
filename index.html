@@ -8,7 +8,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="invoice-container">
+    <div id="mode-selection-container" style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+        font-family: Arial, sans-serif;
+    ">
+        <h1>How would you like to create your invoice?</h1>
+        <div style="margin-top: 20px;">
+            <button id="manual-mode-button" class="btn btn-primary btn-lg" style="margin-right: 10px;">Manually Create Invoice</button>
+            <button id="upload-mode-button" class="btn btn-success btn-lg">Upload Image to Create Invoice</button>
+        </div>
+    </div>
+
+    <div id="main-app-container" style="display: none;">
+        <div class="invoice-container">
         <div class="header">
             <h1 id="invoice-title">Buying Invoice</h1>
             <label class="toggle-switch">
@@ -90,6 +107,7 @@
             <button id="download-button">Download Bill Image</button>
         </div>
     </div>
+</div> <!-- Closing div for main-app-container -->
 
     <div id="previewModal" class="modal">
         <div class="modal-content">

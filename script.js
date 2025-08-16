@@ -30,8 +30,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageUpload = document.getElementById('image-upload');
     const imagePreviewContainer = document.getElementById('image-preview-container');
 
+    // New DOM elements for mode selection
+    const modeSelectionContainer = document.getElementById('mode-selection-container');
+    const manualModeButton = document.getElementById('manual-mode-button');
+    const uploadModeButton = document.getElementById('upload-mode-button');
+    const mainAppContainer = document.getElementById('main-app-container');
+    const imageUploadSection = document.getElementById('image-upload-section'); // Already exists
+
     // Disable makeListButton initially
     makeListButton.disabled = true;
+
+    // Initially hide the main application container
+    mainAppContainer.style.display = 'none';
 
     // List of YAML files to fetch - Comprehensive list
     const fileList = [
@@ -342,12 +352,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            console.log("Gemini API Raw Response:", data);
 
             let geminiExtractedResults = [];
             if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0) {
                 const geminiText = data.candidates[0].content.parts[0].text;
-                console.log("Gemini Extracted Text:", geminiText);
 
                 // Remove markdown code block delimiters if present
                 const cleanedGeminiText = geminiText.replace(/^```json\n/, '').replace(/\n```$/, '');
@@ -392,6 +400,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Mode switching functions
+    function showManualMode() {
+        modeSelectionContainer.style.display = 'none';
+        mainAppContainer.style.display = 'block';
+        imageUploadSection.style.display = 'none';
+        fetchAndParseYamlFiles();
+    }
+
+    function showUploadMode() {
+        modeSelectionContainer.style.display = 'none';
+        mainAppContainer.style.display = 'block';
+        imageUploadSection.style.display = 'block';
+        fetchAndParseYamlFiles();
+    }
+
+    // Event Listeners for mode selection buttons
+    manualModeButton.addEventListener('click', showManualMode);
+    uploadModeButton.addEventListener('click', showUploadMode);
+
     // Event Listeners
     searchInput.addEventListener('input', (event) => {
         const query = event.target.value.toLowerCase();
@@ -422,21 +449,34 @@ document.addEventListener('DOMContentLoaded', () => {
         // Make sure invoice is up-to-date
         previewInvoice();
 
+        // Get the invoice content element
+        const invoiceContent = document.querySelector('#invoicePreview');
+
+        if (!invoiceContent) {
+            console.error("Invoice content not found.");
+            return;
+        }
+
+        // Store original styles
+        const originalInvoicePreviewBg = invoiceContent.style.backgroundColor;
+        const originalMaterialTextColors = [];
+
+        // Apply temporary styles
+        invoiceContent.style.backgroundColor = '#FFFFFF'; // Set a solid white background
+
+        // Target material names in the cart summary for darker text
+        const materialNameCells = invoiceContent.querySelectorAll('#cart-summary-list td:first-child');
+        materialNameCells.forEach(cell => {
+            originalMaterialTextColors.push(cell.style.color); // Store original color
+            cell.style.color = '#000000'; // Set to black
+        });
+
         // Wait a bit for rendering
         setTimeout(() => {
-            // Target the element that contains the *entire* invoice
-            // Replace '#invoicePreview' if your container has a different ID
-            const invoiceContent = document.querySelector('#invoicePreview');
-
-            if (!invoiceContent) {
-                console.error("Invoice content not found.");
-                return;
-            }
-
             // Capture the full scroll height/width of the invoice
             html2canvas(invoiceContent, {
                 scale: 2,
-                backgroundColor: null, // keep dark theme
+                backgroundColor: null, // Let the temporarily set background color take effect
                 useCORS: true,
                 windowWidth: invoiceContent.scrollWidth,
                 windowHeight: invoiceContent.scrollHeight
@@ -449,6 +489,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }).catch(err => {
                 console.error("Error capturing invoice:", err);
             }).finally(() => {
+                // Revert styles
+                invoiceContent.style.backgroundColor = originalInvoicePreviewBg;
+                materialNameCells.forEach((cell, index) => {
+                    cell.style.color = originalMaterialTextColors[index];
+                });
                 // Close the modal after capture
                 previewModal.style.display = 'none';
             });
@@ -503,7 +548,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     const fullDataUrl = e.target.result;
-                    console.log("Full Data URL:", fullDataUrl);
                     const ocrResults = await processImageWithGemini(fullDataUrl);
 
                     ocrResults.forEach(result => {
@@ -525,5 +569,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    fetchAndParseYamlFiles();
+    // fetchAndParseYamlFiles(); // This is now called by the mode selection functions
 });
