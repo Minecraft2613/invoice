@@ -470,124 +470,107 @@ document.addEventListener('DOMContentLoaded', () => {
 
     previewButton.addEventListener('click', previewInvoice);
 
-    downloadButton.addEventListener('click', () => {
-        // Make sure invoice is up-to-date
-        previewInvoice();
+    // ===================== PNG DOWNLOAD =====================
+downloadButton.addEventListener('click', () => {
+    previewInvoice(); // make sure invoice is updated
 
-        // Get the invoice content element
-        const invoiceContent = document.querySelector('#invoicePreview');
+    const invoiceContent = document.querySelector('#invoicePreview');
+    if (!invoiceContent) {
+        console.error("Invoice content not found.");
+        return;
+    }
 
-        if (!invoiceContent) {
-            console.error("Invoice content not found.");
-            return;
-        }
+    // --- Store original styles ---
+    const originalBg = invoiceContent.style.backgroundColor;
+    const originalColors = [];
+    const originalBorders = [];
 
-        // Store original styles
-        const originalInvoicePreviewBg = invoiceContent.style.backgroundColor;
-        const originalTextColors = [];
-        const originalBgColors = [];
+    // --- Apply print-friendly styles ---
+    invoiceContent.style.backgroundColor = '#FFFFFF';
+    const allElements = invoiceContent.querySelectorAll('*');
+    allElements.forEach(el => {
+        originalColors.push(el.style.color);
+        originalBorders.push(el.style.border);
+        el.style.color = '#000000'; // black text
+        el.style.border = '1px solid #000000'; // visible table/grid
+        el.style.backgroundColor = '#FFFFFF'; // white background
+    });
 
-        // Apply temporary styles
-        invoiceContent.style.backgroundColor = '#FFFFFF';
-
-        // Force all text black
-        const textElements = invoiceContent.querySelectorAll('td, th, span, strong, h1, div');
-        textElements.forEach(el => {
-            originalTextColors.push(el.style.color);
-            el.style.color = '#000000';
-        });
-
-        // Force table backgrounds white + borders
-        const tableElements = invoiceContent.querySelectorAll('table, thead, tbody, tr, td, th');
-        tableElements.forEach(el => {
-            originalBgColors.push(el.style.backgroundColor);
-            el.style.backgroundColor = '#FFFFFF';
-            el.style.border = '1px solid #000000';
-        });
-
-        setTimeout(() => {
-            html2canvas(invoiceContent, {
-                scale: 2,
-                backgroundColor: null,
-                useCORS: true,
-                windowWidth: invoiceContent.scrollWidth,
-                windowHeight: invoiceContent.scrollHeight
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }).catch(err => {
-                console.error("Error capturing invoice:", err);
-            }).finally(() => {
-                // Revert styles
-                invoiceContent.style.backgroundColor = originalInvoicePreviewBg;
-                textElements.forEach((el, index) => {
-                    el.style.color = originalTextColors[index];
-                });
-                tableElements.forEach((el, index) => {
-                    el.style.backgroundColor = originalBgColors[index];
-                    el.style.border = '';
-                });
-                previewModal.style.display = 'none';
+    // --- Capture image ---
+    setTimeout(() => {
+        html2canvas(invoiceContent, {
+            scale: 2,
+            backgroundColor: '#FFFFFF',
+            useCORS: true
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }).finally(() => {
+            // --- Revert styles ---
+            invoiceContent.style.backgroundColor = originalBg;
+            allElements.forEach((el, i) => {
+                el.style.color = originalColors[i];
+                el.style.border = originalBorders[i];
+                el.style.backgroundColor = '';
             });
-        }, 300);
-    });
-
-    const pdfButton = document.getElementById('pdf-button');
-
-    pdfButton.addEventListener('click', () => {
-        previewInvoice(); // make sure invoice is updated
-
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        const tableData = [];
-        let subtotal = 0;
-        const isBuying = buySellToggle.checked;
-
-        for (const itemName in cart) {
-            const item = cart[itemName];
-            const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
-            const itemCost = price * item.quantity;
-            subtotal += itemCost;
-
-            tableData.push([item.name, item.quantity, itemCost.toFixed(2)]);
-        }
-
-        doc.autoTable({
-            head: [['Material Name', 'Quantity', 'Cost']],
-            body: tableData,
-            startY: 20,
-            margin: { left: 15, right: 15 },
-            styles: { halign: 'center' },
-            headStyles: { fillColor: [200, 200, 200] }, // light gray header
-            alternateRowStyles: { fillColor: [240, 240, 240] },
+            previewModal.style.display = 'none';
         });
+    }, 300);
+});
 
-        // Summary section
-        const gstRate = parseFloat(gstInput.value) || 0;
-        const gstAmount = subtotal * (gstRate / 100);
 
-        const taxRate = parseFloat(taxInput.value) || 0;
-        const taxAmount = subtotal * (taxRate / 100);
+// ===================== PDF DOWNLOAD =====================
+const pdfButton = document.getElementById('pdf-button');
+pdfButton.addEventListener('click', () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-        const totalAmount = subtotal + gstAmount + taxAmount;
+    const isBuying = buySellToggle.checked;
+    let subtotal = 0;
 
-        // Position for summary, after the table
-        let finalY = doc.lastAutoTable.finalY + 10;
+    // Prepare table data
+    const tableData = [];
+    for (const itemName in cart) {
+        const item = cart[itemName];
+        const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
+        const itemCost = price * item.quantity;
+        subtotal += itemCost;
+        tableData.push([item.name, item.quantity, itemCost.toFixed(2)]);
+    }
 
-        doc.setFontSize(12);
-        doc.text(`Subtotal: ${subtotal.toFixed(2)}`, 20, finalY);
-        finalY += 10;
-        doc.text(`GST (${gstRate}%): ${gstAmount.toFixed(2)}`, 20, finalY);
-        finalY += 10;
-        doc.text(`Tax (${taxRate}%): ${taxAmount.toFixed(2)}`, 20, finalY);
-        finalY += 10;
-        doc.text(`Total Amount: ${totalAmount.toFixed(2)}`, 20, finalY);
-
-        doc.save(`Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.pdf`);
+    // Add table
+    doc.autoTable({
+        head: [['Material Name', 'Quantity', 'Cost']],
+        body: tableData,
+        startY: 20,
+        margin: { left: 15, right: 15 },
+        styles: { halign: 'center' },
+        headStyles: { fillColor: [200, 200, 200] },
+        alternateRowStyles: { fillColor: [240, 240, 240] }
     });
+
+    // Add totals
+    const gstRate = parseFloat(gstInput.value) || 0;
+    const gstAmount = subtotal * (gstRate / 100);
+
+    const taxRate = parseFloat(taxInput.value) || 0;
+    const taxAmount = subtotal * (taxRate / 100);
+
+    const totalAmount = subtotal + gstAmount + taxAmount;
+
+    let y = doc.lastAutoTable.finalY + 10;
+    doc.text(`Subtotal: ${subtotal.toFixed(2)}`, 15, y);
+    y += 8;
+    doc.text(`GST (${gstRate}%): ${gstAmount.toFixed(2)}`, 15, y);
+    y += 8;
+    doc.text(`Tax (${taxRate}%): ${taxAmount.toFixed(2)}`, 15, y);
+    y += 8;
+    doc.text(`Total Amount: ${totalAmount.toFixed(2)}`, 15, y);
+
+    doc.save(`Minecraft_${isBuying ? 'Buying' : 'Selling'}_Invoice.pdf`);
+});
 
     closeModalButton.addEventListener('click', () => {
         previewModal.style.display = 'none';
