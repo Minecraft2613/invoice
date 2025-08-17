@@ -587,3 +587,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // fetchAndParseYamlFiles(); // This is now called by the mode selection functions
 });
+const pdfButton = document.getElementById('pdf-button');
+
+pdfButton.addEventListener('click', () => {
+    previewInvoice(); // make sure invoice is updated
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    let y = 20; // vertical position
+    const lineHeight = 10;
+    const maxRowsPerPage = 18; // 15–20 items per page
+    let rowCount = 0;
+
+    doc.setFontSize(16);
+    doc.text(`${buySellToggle.checked ? 'Buying' : 'Selling'} Invoice`, 105, 10, { align: "center" });
+    doc.setFontSize(12);
+
+    // Table header
+    doc.text("Material Name", 20, y);
+    doc.text("Quantity", 100, y);
+    doc.text("Cost", 150, y);
+    y += lineHeight;
+
+    const isBuying = buySellToggle.checked;
+    let subtotal = 0;
+
+    for (const itemName in cart) {
+        const item = cart[itemName];
+        const price = isBuying ? (item.buy_price || 0) : (item.sell_price || 0);
+        const itemCost = price * item.quantity;
+        subtotal += itemCost;
+
+        doc.text(item.name, 20, y);
+        doc.text(item.quantity.toString(), 100, y);
+        doc.text(itemCost.toFixed(2), 150, y);
+
+        y += lineHeight;
+        rowCount++;
+
+        // Page break after 18 rows
+        if (rowCount >= maxRowsPerPage) {
+            doc.addPage();
+            y = 20;
+            doc.text("Material Name", 20, y);
+            doc.text("Quantity", 100, y);
+            doc.text("Cost", 150, y);
+            y += lineHeight;
+            rowCount = 0;
+        }
+    }
+
+    // Summary section
+    const gstRate = parseFloat(gstInput.value) || 0;
+    const gstAmount = subtotal * (gstRate / 100);
+
+    const taxRate = parseFloat(taxInput.value) || 0;
+    const taxAmount = subtotal * (taxRate / 100);
+
+    const totalAmount = subtotal + gstAmount + taxAmount;
+
+    y += 10;
+    doc.setFontSize(12);
+    doc.text(`Subtotal: ${subtotal.toFixed(2)}`, 20, y);
+    y += lineHeight;
+    doc.text(`GST (${gstRate}%): ${gstAmount.toFixed(2)}`, 20, y);
+    y += lineHeight;
+    doc.text(`Tax (${taxRate}%): ${taxAmount.toFixed(2)}`, 20, y);
+    y += lineHeight;
+    doc.text(`Total Amount: ${totalAmount.toFixed(2)}`, 20, y);
+
+    doc.save(`Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.pdf`);
+});
