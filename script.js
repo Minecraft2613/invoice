@@ -471,59 +471,50 @@ document.addEventListener('DOMContentLoaded', () => {
     previewButton.addEventListener('click', previewInvoice);
 
     downloadButton.addEventListener('click', () => {
-        // Make sure invoice is up-to-date
-        previewInvoice();
+    previewInvoice();
 
-        // Get the invoice content element
-        const invoiceContent = document.querySelector('#invoicePreview');
+    const invoiceContent = document.querySelector('#invoicePreview');
+    if (!invoiceContent) {
+        console.error("Invoice content not found.");
+        return;
+    }
 
-        if (!invoiceContent) {
-            console.error("Invoice content not found.");
-            return;
-        }
+    // Store original styles
+    const originalInvoicePreviewBg = invoiceContent.style.backgroundColor;
+    const originalTextColors = [];
 
-        // Store original styles
-        const originalInvoicePreviewBg = invoiceContent.style.backgroundColor;
-        const originalMaterialTextColors = [];
-
-        // Apply temporary styles
-        invoiceContent.style.backgroundColor = '#FFFFFF'; // Set a solid white background
-
-        // Target material names in the cart summary for darker text
-        const materialNameCells = invoiceContent.querySelectorAll('#cart-summary-list td:first-child');
-        materialNameCells.forEach(cell => {
-            originalMaterialTextColors.push(cell.style.color); // Store original color
-            cell.style.color = '#000000'; // Set to black
-        });
-
-        // Wait a bit for rendering
-        setTimeout(() => {
-            // Capture the full scroll height/width of the invoice
-            html2canvas(invoiceContent, {
-                scale: 2,
-                backgroundColor: null, // Let the temporarily set background color take effect
-                useCORS: true,
-                windowWidth: invoiceContent.scrollWidth,
-                windowHeight: invoiceContent.scrollHeight
-            }).then(canvas => {
-                // Download the PNG
-                const link = document.createElement('a');
-                link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }).catch(err => {
-                console.error("Error capturing invoice:", err);
-            }).finally(() => {
-                // Revert styles
-                invoiceContent.style.backgroundColor = originalInvoicePreviewBg;
-                materialNameCells.forEach((cell, index) => {
-                    cell.style.color = originalMaterialTextColors[index];
-                });
-                // Close the modal after capture
-                previewModal.style.display = 'none';
-            });
-        }, 300);
+    // Apply temporary styles
+    invoiceContent.style.backgroundColor = '#FFFFFF'; // solid white background
+    const textCells = invoiceContent.querySelectorAll('td, th, span, strong, h1');
+    textCells.forEach(cell => {
+        originalTextColors.push(cell.style.color);
+        cell.style.color = '#000000'; // force all text black
     });
+
+    setTimeout(() => {
+        html2canvas(invoiceContent, {
+            scale: 2,
+            backgroundColor: null,
+            useCORS: true,
+            windowWidth: invoiceContent.scrollWidth,
+            windowHeight: invoiceContent.scrollHeight
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Minecraft_${buySellToggle.checked ? 'Buying' : 'Selling'}_Invoice.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }).catch(err => {
+            console.error("Error capturing invoice:", err);
+        }).finally(() => {
+            // Revert styles
+            invoiceContent.style.backgroundColor = originalInvoicePreviewBg;
+            textCells.forEach((cell, index) => {
+                cell.style.color = originalTextColors[index];
+            });
+            previewModal.style.display = 'none';
+        });
+    }, 300);
+});
 
     closeModalButton.addEventListener('click', () => {
         previewModal.style.display = 'none';
